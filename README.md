@@ -1,31 +1,31 @@
 # Heimdall
 A web based viewer for Inspec Results.
 
-##Note
+## Note
 Please note that is a proof of context and will eventually be heavily refactored.
 
-##Requirements
+## Requirements
 
-Ruby
+Ruby &
 Sinatra
 
-##Usage
+## Usage
 
 ```
 ./Heimdall inspec_results.json
 ```
 
-##Features
+## Features
 
-###Results Summary
+### Results Summary
 
-![Screenshot](Results_summary.png)
+![Alt text](/screenshots/Results_summary.png?raw=true "Results Summary")
 
-###NIST Coverage Map
+### NIST Coverage Map
 
-![Screenshot](Nist_coverage.png)
+![Alt text](/screenshots/Nist_coverage.png?raw=true "Results Summary")
 
-###NIST Results Details
+### NIST Results Details
 
-![Screenshot](Nist_coverage.png)
+![Alt text](/screenshots/Nist_coverage.png?raw=true "Results Summary")
 
