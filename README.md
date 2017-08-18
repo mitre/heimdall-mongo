@@ -12,7 +12,7 @@ Sinatra
 ## Usage
 
 ```
-./Heimdall inspec_results.json
+./heimdall inspec_results.json
 ```
 
 ## Features
