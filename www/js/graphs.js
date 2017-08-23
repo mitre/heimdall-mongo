@@ -273,13 +273,13 @@ function score (){
         'packages': ['treemap']
       });
       google.charts.setOnLoadCallback(drawChart);
-
+      var treemapData = getTreeMapData()
       function drawChart() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'ID');
         data.addColumn('string', 'Parent');
         data.addColumn('number', 'Number Of Lines');
-        data.addRows(getTreeMapData());
+        data.addRows(treemapData);
 
         var tree = new google.visualization.TreeMap(document.getElementById('nist_treemap'));
 
@@ -294,8 +294,8 @@ function score (){
           maxColor: '#00FF00',
           headerHeight: 15,
           showScale: true,
-          height: 300,
-          width: 880,
+          // height: 300,
+          // width: 880,
           showScale: false  ,
 
 
@@ -310,7 +310,9 @@ function score (){
         updateColors();
       }
 
-
+$(window).resize(function(){
+  drawChart();
+});
 
     function updateColors() {
         if (not_a_finding_count > 0 )
@@ -509,5 +511,6 @@ function filter(keyword){
         return n.result==='keyword';
     });
 }
+
 
 // console.log(filter('NotAFinding'))

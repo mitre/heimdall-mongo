@@ -40,9 +40,10 @@
             stroke: black;
             stroke-width: 0.25;
           }
-      .chart {
-        width: 100%;
-      }
+.chart {
+  width: 100%; 
+  min-height: 300px;
+}
  </style>
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
@@ -229,9 +230,10 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div id="nist_treemap" class = "chart" style="width: 10%; height: 20%;"></div>
+                            <div id="nist_treemap" class = "chart"></div>
+                            <!--  <div id="nist_treemap" class = "chart" style="width: 10%; height: 20%;"></div>-->
                         <div class="panel-heading">
-                            <img src="">
+                            <div style="text-align: center;"><img src="/images/treemap_legend.png"></div>
                         </div>
 
                         </div>
