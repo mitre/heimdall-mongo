@@ -25,7 +25,6 @@ Sinatra
 
 ![Alt text](/screenshots/Nist_coverage.png?raw=true "Results Summary")
 
-### NIST Results Details
+### Inspec Results Details
 
 ![Alt text](/screenshots/Results_List.png?raw=true "Results Summary")
-

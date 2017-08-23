@@ -1,4 +1,5 @@
 
+
 function format ( d ) {
     // `d` is the original data object for the row
     return '<ul class="nav nav-tabs">'+
@@ -60,8 +61,18 @@ function format ( d ) {
 
 
 function load_tables() {
+  dataSet = filterDataset();
+  if ( $.fn.dataTable.isDataTable( '#results_table' ) ) {
+  var datatable = $('#results_table').dataTable().api();
+    datatable.clear();
+    datatable.rows.add(dataSet);
+    datatable.draw();
+  }
+  else
+  {
     var table = $('#results_table').DataTable( {
          "iDisplayLength": 5,
+  
   "rowCallback": function( row, data, index ) {
     if ( data.result == "NotAFinding" ) {
       $('td:eq(0)', row).html( '<button class="btn btn-success" style="width:120px" >NotAFinding</button> ' );
@@ -95,7 +106,7 @@ function load_tables() {
         ],
         "order": [[1, 'asc']]
     } );
-    
+
     // Add event listener for opening and closing details
     $('#results_table tbody').on('click', 'td.details-control', function () {
         // console.log("test");
@@ -104,7 +115,7 @@ function load_tables() {
 
          if ( row.child.isShown() ) {
          row.child.hide();
-         tr.removeClass('shown');     
+         tr.removeClass('shown');
         }
     else
         {
@@ -115,12 +126,16 @@ function load_tables() {
           tr.addClass('shown');
      }
     } );
-
-
-document.getElementById("not_a_finding").innerHTML = $(dataSet).filter(function (i,n){return n.result==='NotAFinding';}).length;
-document.getElementById("open").innerHTML = $(dataSet).filter(function (i,n){return n.result==='Open';}).length;
-document.getElementById("not_applicable").innerHTML = $(dataSet).filter(function (i,n){return n.result==='Not_Applicable';}).length;
-document.getElementById("not_reviewed").innerHTML = $(dataSet).filter(function (i,n){return n.result==='Not_Reviewed';}).length;
+}
+var not_a_finding_count  = $(dataSet).filter(function (i,n){return n.result==='NotAFinding';}).length;
+var open_count           = $(dataSet).filter(function (i,n){return n.result==='Open';}).length;
+var not_applicable_count = $(dataSet).filter(function (i,n){return n.result==='Not_Applicable';}).length;
+var not_reviewed_count   = $(dataSet).filter(function (i,n){return n.result==='Not_Reviewed';}).length;
+var not_tested_count     = $(dataSet).filter(function (i,n){return n.result==='Not_Tested';}).length;
+document.getElementById("not_a_finding").innerHTML = not_a_finding_count;
+document.getElementById("open").innerHTML = open_count;
+document.getElementById("not_applicable").innerHTML = not_applicable_count;
+document.getElementById("not_reviewed").innerHTML = not_reviewed_count;
 
 
 
@@ -128,22 +143,34 @@ document.getElementById("not_reviewed").innerHTML = $(dataSet).filter(function (
 // var pass = $(dataSet).filter(function (i,n){return n.result==='NotAFinding';}).length;
 // alert(pass);
 status_data = [
-            ['Not A Finding', $(dataSet).filter(function (i,n){return n.result==='NotAFinding';}).length],
-            ['Open', $(dataSet).filter(function (i,n){return n.result==='Open';}).length],
-            ['Not Applicable', $(dataSet).filter(function (i,n){return n.result==='Not_Applicable';}).length],
-            ['Not Reviewed', $(dataSet).filter(function (i,n){return n.result==='Not_Reviewed';}).length],
+            ['Not A Finding', not_a_finding_count],
+            ['Open', open_count],
+            ['Not Applicable', not_applicable_count],
+            ['Not Reviewed', not_reviewed_count],
         ];
 
 c3.generate({
             bindto: '#status_pie',
-    
+
 
     data: {
         columns: status_data,
         type : 'donut',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+        onclick: function (d) {
+          document.getElementById("clear_filters_button").style.visibility = "visible";
+          if (d.id == 'Not A Finding'){
+            data_filter.result = 'NotAFinding';
+          }else if (d.id == 'Open'){
+            data_filter.result = 'Open';
+          }else if (d.id == 'Not Applicable'){
+            data_filter.result = 'Not_Applicable';
+          }else if (d.id == 'Not Reviewed'){
+            data_filter.result = 'Not_Reviewed';
+          }
+          load_tables();
+        },
+        // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
     },
     color: {
         pattern: ['rgb(137, 204, 81)', 'rgb(255, 0, 41)', 'rgb(0, 200, 241)', 'rgb(255, 200, 87)']
@@ -171,9 +198,19 @@ c3.generate({
             ['CAT III', $(dataSet).filter(function (i,n){return n.severity==='low';}).length],
         ],
         type : 'donut',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+        onclick: function (d) {
+          document.getElementById("clear_filters_button").style.visibility = "visible";
+          if (d.id == 'CAT I'){
+            data_filter.severity = 'high';
+          }else if (d.id == 'CAT II'){
+            data_filter.severity = 'medium';
+          }else if (d.id == 'CAT III'){
+            data_filter.severity = 'low';
+          }
+          load_tables();
+        },
+        // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
     },
         color: {
         pattern: ['rgb(255, 0, 41)','rgb(255, 200, 87)','rgb(137, 204, 81)' ]
@@ -192,7 +229,7 @@ c3.generate({
 });
 
 function score (){
-    return ((status_data[0][1] + status_data[2][1])/dataSet.length)*100
+    return ((not_a_finding_count + not_applicable_count)/dataSet.length)*100
     // console.log(dataSet.length)
 }
         c3.generate({
@@ -203,9 +240,9 @@ function score (){
             ['data', score ()]
         ],
         type: 'gauge',
-        onclick: function (d, i) { console.log("onclick", d, i); },
-        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+        // onclick: function (d, i) { console.log("onclick", d, i); },
+        // onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        // onmouseout: function (d, i) { console.log("onmouseout", d, i); }
     },
     gauge: {
 //        label: {
@@ -275,33 +312,106 @@ function score (){
 
 
 
-      function updateColors() {
-        $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
-                    <!-- not applicable -->
-          if ($(this).children('rect').attr('fill') === '#7f8000') {
+    function updateColors() {
+        if (not_a_finding_count > 0 )
+        {
+          $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
+            if ($(this).children('rect').attr('fill') === '#7f8000') {
+              $(this).children('rect').css({
+                fill: "#C8EFF1" //NA
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#ff0000') {
+              $(this).children('rect').css({
+                fill: "#FFC857" //NR
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#00ff00') {
+              $(this).children('rect').css({
+                fill: "#89CC51" //NAF
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#ff7f7f') {
+              $(this).children('rect').css({
+                fill: "#FF0029" //O
+              });
+            }
+            else {
             $(this).children('rect').css({
-              fill: "#C8EFF1"
-            });
-          } else if ($(this).children('rect').attr('fill') === '#ff0000') {
+                fill: "#FFFFFF"
+              });
+            }
+          });
+        } else if (not_applicable_count > 0 )
+        {
+          $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
+            if ($(this).children('rect').attr('fill') === '#00ff00') {
+              $(this).children('rect').css({
+                fill: "#C8EFF1" //NA
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#7f8000') {
+              $(this).children('rect').css({
+                fill: "#FFC857" //NR
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#ff0000') {
+              $(this).children('rect').css({
+                fill: "#FF0029" //O
+              });
+
+            } else {
             $(this).children('rect').css({
-              fill: "#FFC857"
-            });
-          } else if ($(this).children('rect').attr('fill') === '#00ff00') {
+                fill: "#FFFFFF"
+              });
+            }
+          });
+        } else if (not_reviewed_count > 0 )
+        {
+          $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
+           if ($(this).children('rect').attr('fill') === '#00ff00') {
+              $(this).children('rect').css({
+                fill: "#FFC857" //NR
+              });
+
+            } else if ($(this).children('rect').attr('fill') === '#7f8000') {
+              $(this).children('rect').css({
+                fill: "#FF0029" //O
+              });
+
+            }
+            else {
             $(this).children('rect').css({
-              fill: "#89CC51"
-            });
-          } else if ($(this).children('rect').attr('fill') === '#ff7f7f') {
+                fill: "#FFFFFF"
+              });
+            }
+          });
+        } else if (open_count > 0 )
+        {
+          $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
+            if ($(this).children('rect').attr('fill') === '#00ff00') {
+              $(this).children('rect').css({
+                fill: "#FF0029" //O
+              });
+
+            } else {
             $(this).children('rect').css({
-              fill: "#FF0029"
-            });
-          }
-          else {
-          $(this).children('rect').css({
-              fill: "#FFFFFF"
-            });
-          }
-        });
-      }
+                fill: "#FFFFFF"
+              });
+            }
+          });
+        } else 
+        {
+          $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
+            $(this).children('rect').css({
+                fill: "#FFFFFF"
+              });
+            
+          });
+        }
+
+
+    }
 
 
 };
@@ -313,11 +423,11 @@ function getTreeMapData()
  var treeMapData = [['NIST 800 53',null,0],['AC','NIST 800 53',null],['AU','NIST 800 53',null],['AT','NIST 800 53',null],['CM','NIST 800 53',null],['CP','NIST 800 53',null],['IA','NIST 800 53',null],['IR','NIST 800 53',null],['MA','NIST 800 53',null],['MP','NIST 800 53',null],['PS','NIST 800 53',null],['PE','NIST 800 53',null],['PL','NIST 800 53',null],['PM','NIST 800 53',null],['RA','NIST 800 53',null],['CA','NIST 800 53',null],['SC','NIST 800 53',null],['SI','NIST 800 53',null],['SA','NIST 800 53',null],['AC-1','AC',1],['AC-2','AC',1],['AC-3','AC',1],['AC-4','AC',1],['AC-5','AC',1],['AC-6','AC',1],['AC-7','AC',1],['AC-8','AC',1],['AC-9','AC',1],['AC-10','AC',1],['AC-11','AC',1],['AC-12','AC',1],['AC-13','AC',1],['AC-14','AC',1],['AC-15','AC',1],['AC-16','AC',1],['AC-17','AC',1],['AC-18','AC',1],['AC-19','AC',1],['AC-20','AC',1],['AC-21','AC',1],['AC-22','AC',1],['AC-23','AC',1],['AC-24','AC',1],['AC-25','AC',1],['AU-1','AU',1],['AU-2','AU',1],['AU-3','AU',1],['AU-4','AU',1],['AU-5','AU',1],['AU-6','AU',1],['AU-7','AU',1],['AU-8','AU',1],['AU-9','AU',1],['AU-10','AU',1],['AU-11','AU',1],['AU-12','AU',1],['AU-13','AU',1],['AU-14','AU',1],['AU-15','AU',1],['AU-16','AU',1],['AT-1','AT',1],['AT-2','AT',1],['AT-3','AT',1],['AT-4','AT',1],['AT-5','AT',1],['CM-1','CM',1],['CM-2','CM',1],['CM-3','CM',1],['CM-4','CM',1],['CM-5','CM',1],['CM-6','CM',1],['CM-7','CM',1],['CM-8','CM',1],['CM-9','CM',1],['CM-10','CM',1],['CM-11','CM',1],['CP-1','CP',1],['CP-2','CP',1],['CP-3','CP',1],['CP-4','CP',1],['CP-5','CP',1],['CP-6','CP',1],['CP-7','CP',1],['CP-8','CP',1],['CP-9','CP',1],['CP-10','CP',1],['CP-11','CP',1],['CP-12','CP',1],['CP-13','CP',1],['IA-1','IA',1],['IA-2','IA',1],['IA-3','IA',1],['IA-4','IA',1],['IA-5','IA',1],['IA-6','IA',1],['IA-7','IA',1],['IA-8','IA',1],['IA-9','IA',1],['IA-10','IA',1],['IA-11','IA',1],['IR-1','IR',1],['IR-2','IR',1],['IR-3','IR',1],['IR-4','IR',1],['IR-5','IR',1],['IR-6','IR',1],['IR-7','IR',1],['IR-8','IR',1],['IR-9','IR',1],['IR-10','IR',1],['MA-1','MA',1],['MA-2','MA',1],['MA-3','MA',1],['MA-4','MA',1],['MA-5','MA',1],['MA-6','MA',1],['MP-1','MP',1],['MP-2','MP',1],['MP-3','MP',1],['MP-4','MP',1],['MP-5','MP',1],['MP-6','MP',1],['MP-7','MP',1],['MP-8','MP',1],['PS-1','PS',1],['PS-2','PS',1],['PS-3','PS',1],['PS-4','PS',1],['PS-5','PS',1],['PS-6','PS',1],['PS-7','PS',1],['PS-8','PS',1],['PE-1','PE',1],['PE-2','PE',1],['PE-3','PE',1],['PE-4','PE',1],['PE-5','PE',1],['PE-6','PE',1],['PE-7','PE',1],['PE-8','PE',1],['PE-9','PE',1],['PE-10','PE',1],['PE-11','PE',1],['PE-12','PE',1],['PE-13','PE',1],['PE-14','PE',1],['PE-15','PE',1],['PE-16','PE',1],['PE-17','PE',1],['PE-18','PE',1],['PE-19','PE',1],['PE-20','PE',1],['PL-1','PL',1],['PL-2','PL',1],['PL-3','PL',1],['PL-4','PL',1],['PL-5','PL',1],['PL-6','PL',1],['PL-7','PL',1],['PL-8','PL',1],['PL-9','PL',1],['PM-1','PM',1],['PM-2','PM',1],['PM-3','PM',1],['PM-4','PM',1],['PM-5','PM',1],['PM-6','PM',1],['PM-7','PM',1],['PM-8','PM',1],['PM-9','PM',1],['PM-10','PM',1],['PM-11','PM',1],['PM-12','PM',1],['PM-13','PM',1],['PM-14','PM',1],['PM-15','PM',1],['PM-16','PM',1],['RA-1','RA',1],['RA-2','RA',1],['RA-3','RA',1],['RA-4','RA',1],['RA-5','RA',1],['RA-6','RA',1],['CA-1','CA',1],['CA-2','CA',1],['CA-3','CA',1],['CA-4','CA',1],['CA-5','CA',1],['CA-6','CA',1],['CA-7','CA',1],['CA-8','CA',1],['CA-9','CA',1],['SC-1','SC',1],['SC-2','SC',1],['SC-3','SC',1],['SC-4','SC',1],['SC-5','SC',1],['SC-6','SC',1],['SC-7','SC',1],['SC-8','SC',1],['SC-9','SC',1],['SC-10','SC',1],['SC-11','SC',1],['SC-12','SC',1],['SC-13','SC',1],['SC-14','SC',1],['SC-15','SC',1],['SC-16','SC',1],['SC-17','SC',1],['SC-18','SC',1],['SC-19','SC',1],['SC-20','SC',1],['SC-21','SC',1],['SC-22','SC',1],['SC-23','SC',1],['SC-24','SC',1],['SC-25','SC',1],['SC-26','SC',1],['SC-27','SC',1],['SC-28','SC',1],['SC-29','SC',1],['SC-30','SC',1],['SC-31','SC',1],['SC-32','SC',1],['SC-33','SC',1],['SC-34','SC',1],['SC-35','SC',1],['SC-36','SC',1],['SC-37','SC',1],['SC-38','SC',1],['SC-39','SC',1],['SC-40','SC',1],['SC-41','SC',1],['SC-42','SC',1],['SC-43','SC',1],['SC-44','SC',1],['SI-1','SI',1],['SI-2','SI',1],['SI-3','SI',1],['SI-4','SI',1],['SI-5','SI',1],['SI-6','SI',1],['SI-7','SI',1],['SI-8','SI',1],['SI-9','SI',1],['SI-10','SI',1],['SI-11','SI',1],['SI-12','SI',1],['SI-13','SI',1],['SI-14','SI',1],['SI-15','SI',1],['SI-16','SI',1],['SI-17','SI',1],['SA-1','SA',1],['SA-2','SA',1],['SA-3','SA',1],['SA-4','SA',1],['SA-5','SA',1],['SA-6','SA',1],['SA-7','SA',1],['SA-8','SA',1],['SA-9','SA',1],['SA-10','SA',1],['SA-11','SA',1],['SA-12','SA',1],['SA-13','SA',1],['SA-14','SA',1],['SA-15','SA',1],['SA-16','SA',1],['SA-17','SA',1],['SA-18','SA',1],['SA-19','SA',1],['SA-20','SA',1],['SA-21','SA',1],['SA-22','SA',1]]
     var id = 1;
     for (var i = 0; i < dataSet.length; i++)
-    {   
+    {
         var control = dataSet[i];
         for(var j = 0; j < control.nist.length; j++)
         {
-            
+
             if (!control.nist[j].match(/Rev/))
                 {
                     var record = [];
@@ -333,36 +443,71 @@ function getTreeMapData()
                         }
                     if (control.result === 'Open')
                         {
+
                             record.push(1.1);
                         }
                     if (control.result === 'Not_Applicable')
                         {
+
                             record.push(1.3);
                         }
                     if (control.result === 'Not_Reviewed')
                         {
+
                             record.push(1.2);
                         }
                     if (control.result === 'Not_Tested')
                         {
+
                             record.push(1.0);
                         }
-                    
+
                     treeMapData.push(record);
                 }
-            
+
         }
     }
     return treeMapData
 }
-    
 
 
 
-// function filter(keyword){
-//     dataSet.filter(function (i,n){
-//         return n.result==='keyword';
-//     });
-// }
+
+var data_filter = {
+  'result' : '*',
+  'severity' : '*',
+}
+
+// var dataSet = [];
+
+function filterDataset ()
+{
+
+  dataSet = raw_dataSet;
+  if (data_filter.result != '*')
+  {
+    dataSet = $(dataSet).filter(function (i,n){return n.result === data_filter.result ;});
+  }
+  if (data_filter.severity != '*')
+  {
+    dataSet = $(dataSet).filter(function (i,n){return n.severity === data_filter.severity ;});
+  }
+  return dataSet;
+}
+
+$("#clear_filters_button").click(function(){
+  document.getElementById("clear_filters_button").style.visibility = "hidden";
+  data_filter = {
+  'result' : '*',
+  'severity' : '*',
+};
+load_tables();
+});
+
+function filter(keyword){
+    dataSet.filter(function (i,n){
+        return n.result==='keyword';
+    });
+}
 
 // console.log(filter('NotAFinding'))
