@@ -83,14 +83,14 @@
                           <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Load Results<span class="fa arrow"></span></a>
                           <ul class="nav nav-second-level" >
                               <li>
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                      <form action="/upload" method="POST" enctype="multipart/form-data">
-                                          <input type="file" accept=".json" name="file" style="width: 100%; height: 100%;"><br><br>
-                                          <input type="submit" class="col-xs-12 btn btn-info" value="Upload">
-                                      </form>
-                                    </div>
-                                </div>
+                          <div class="panel panel-default">
+                              <div class="panel-body">
+                                <form action="/upload" method="POST" enctype="multipart/form-data">
+                                    <input type="file" name="file" style="width: 100%; height: 100%;"><br><br>
+                                    <input type="submit" class="col-xs-12 btn btn-info" value="Upload">
+                                </form>
+                              </div>
+                          </div>
                               </li>
                           </ul>
 
@@ -338,7 +338,7 @@
 
       var raw_dataSet
       var xmlhttp = new XMLHttpRequest();
-      $.getJSON("/data/inspec_results.json", function(json) {
+      $.getJSON("/data/<%= @json_file %>.json", function(json) {
           raw_dataSet = json['controls']; // this will show the info it in firebug console
           document.getElementById("profile_name").innerHTML = json['profile_name'];
           load_tables();
@@ -348,7 +348,6 @@
           Object.keys(json).forEach(function(key) {
             results_list_html = results_list_html + '<li><a href="#" >' + key + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
             json[key].map( function(item) {
-              console.log(btoa( key + ': ' + item ));
               link = "/result/" + btoa( key + ': ' + item ) + ".html"
               results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
             })
@@ -359,6 +358,7 @@
 
       });
           </script>
+
 
 
           <script type="text/javascript">

@@ -72,7 +72,7 @@ function load_tables() {
   {
     var table = $('#results_table').DataTable( {
          "iDisplayLength": 5,
-  
+
   "rowCallback": function( row, data, index ) {
     if ( data.result == "NotAFinding" ) {
       $('td:eq(0)', row).html( '<button class="btn btn-success" style="width:120px" >NotAFinding</button> ' );
@@ -402,13 +402,13 @@ $(window).resize(function(){
               });
             }
           });
-        } else 
+        } else
         {
           $('#nist_treemap').children('div').children('div').children('div').children('svg').children('g').each(function() {
             $(this).children('rect').css({
                 fill: "#FFFFFF"
               });
-            
+
           });
         }
 

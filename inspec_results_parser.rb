@@ -6,12 +6,15 @@
 
 require 'nokogiri'
 require 'json'
+require_relative 'mongo.rb'
 
-class Heimdall
-  def initialize(json)
+class InspecResultsParser
+  def initialize(inspec_json)
     begin
-      inspec_json = File.read(json)
+      # inspec_json = File.read(json)
       @data = parse_json(inspec_json)
+      @mdb = Mongo_DB.new
+      @mdb.insert_profile(@data)
       File.write("#{File.dirname(__FILE__)}/www/data/inspec_results.json", @data.to_json)
     rescue => err
       puts "Exception: #{err}"
@@ -54,12 +57,12 @@ class Heimdall
     controls = []
     if file['profiles'].length == 1
       controls = file['profiles'].last['controls']
-      results_json['profile_name'] = file['profiles'].last['name']
+      results_json['profile_name'] = file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     else
       file['profiles'].each do |profile|
         controls.concat(profile['controls'])
       end
-      results_json['profile_name'] = 'Overlay'
+      results_json['profile_name'] = 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     end
     data = {}
     controls.each do |control|
@@ -100,18 +103,4 @@ class Heimdall
     results_json['controls'] = data.values
     results_json
   end
-end
-
-Heimdall.new(ARGV[0])
-
-require 'sinatra'
-
-set :public_folder, "#{File.dirname(__FILE__)}/www"
-
-get '/static/:name' do |n|
-  send_file "#{n.to_s}"
-end
-
-get '/' do
-  send_file "#{File.dirname(__FILE__)}/www/pages/index.html"
 end
