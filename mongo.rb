@@ -47,3 +47,6 @@ class Mongo_DB
     end
   end
 end
+# 
+# mdb = Mongo_DB.new
+# mdb.drop_all_collections

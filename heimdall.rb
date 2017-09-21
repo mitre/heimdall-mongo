@@ -20,7 +20,6 @@ class Heimdall < Sinatra::Base
     loaded_results = {}
     puts json
     json['collections'].each do |profile_name|
-      # profile_name = Base64.decode64(profile_name)
       loaded_results[profile_name.split(': ')[0]] = [] unless loaded_results.key?(profile_name.split(': ')[0])
       loaded_results[profile_name.split(': ')[0]].push(profile_name.split(': ')[1])
     end unless !json.key?('collections')
