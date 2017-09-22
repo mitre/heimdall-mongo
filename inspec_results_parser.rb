@@ -11,7 +11,7 @@ require_relative 'mongo.rb'
 class InspecResultsParser
   def initialize(inspec_json)
     begin
-      # inspec_json = File.read(json)
+      # inspec_json = File.read(inspec_json)
       @data = parse_json(inspec_json)
       @mdb = Mongo_DB.new
       @mdb.insert_profile(@data)
@@ -20,7 +20,7 @@ class InspecResultsParser
       puts "Exception: #{err}"
       abort
     end
-    # puts "\nProcessed #{@data.keys.count} controls"
+    puts "\nProcessed #{@data.keys.count} controls"
   end
 
   def clk_status(control)
@@ -55,14 +55,21 @@ class InspecResultsParser
     results_json = Hash.new
     file = JSON.parse(json)
     controls = []
-    if file['profiles'].length == 1
+    if file['profiles'].nil?
+      puts "-------> here"
+      controls = file['controls']
+      # results_json['profile_name'] = file['name'] + ': ' + file['version']
+      results_json['profile_name'] = 'profile;'+ file['name'] + ': ' + file['version']
+    elsif file['profiles'].length == 1
       controls = file['profiles'].last['controls']
-      results_json['profile_name'] = file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      # results_json['profile_name'] = file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      results_json['profile_name'] = 'result;'+ file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     else
       file['profiles'].each do |profile|
         controls.concat(profile['controls'])
       end
-      results_json['profile_name'] = 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      # results_json['profile_name'] = 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      results_json['profile_name'] = 'result;'+ 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     end
     data = {}
     controls.each do |control|
@@ -80,22 +87,14 @@ class InspecResultsParser
       data[c_id][:nist]           = control['tags']['nist'] || ['Unmapped']
       data[c_id][:check_content]  = control['tags']['check'] || 'invalid'
       data[c_id][:fix_text]       = control['tags']['fix'] || 'invalid'
+
+      data[c_id][:rationale]       = control['tags']['rationale'] || 'invalid'
+      data[c_id][:cis_family]       = control['tags']['cis_family'] || 'invalid'
+      data[c_id][:cis_rid]       = control['tags']['cis_rid'] || 'invalid'
+      data[c_id][:cis_level]       = control['tags']['cis_level'] || 'invalid'
+
       data[c_id][:impact]         = control['impact'].to_s || 0
       data[c_id][:code]           = control['code'].to_s || 'invalid'
-      # data[c_id][:vuln_num]       = control['id'] unless control['id'].nil?
-      # data[c_id][:rule_title]     = control['title'] unless control['title'].nil?
-      # data[c_id][:vuln_discuss]   = control['desc'] unless control['desc'].nil?
-      # data[c_id][:severity]       = control['tags']['severity'] unless control['tags']['severity'].nil?
-      # data[c_id][:gid]            = control['tags']['gid'] unless control['tags']['gid'].nil?
-      # data[c_id][:group_title]    = control['tags']['gtitle'] unless control['tags']['gtitle'].nil?
-      # data[c_id][:rule_id]        = control['tags']['rid'] unless control['tags']['rid'].nil?
-      # data[c_id][:rule_ver]       = control['tags']['stig_id'] unless control['tags']['stig_id'].nil?
-      # data[c_id][:cci_ref]        = control['tags']['cci'] unless control['tags']['cci'].nil?
-      # data[c_id][:nist]           = control['tags']['nist'] unless control['tags']['nist'].nil?
-      # data[c_id][:check_content]  = control['tags']['check'] unless control['tags']['check'].nil?
-      # data[c_id][:fix_text]       = control['tags']['fix'] unless control['tags']['fix'].nil?
-      # data[c_id][:impact]         = control['impact'].to_s unless control['impact'].nil?
-      # data[c_id][:code]           = control['code'].to_s unless control['code'].nil?
 
       data[c_id][:status] = []
       data[c_id][:message] = []
@@ -118,3 +117,4 @@ class InspecResultsParser
     results_json
   end
 end
+# InspecResultsParser.new('rhel7profile2.json')

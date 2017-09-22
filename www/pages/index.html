@@ -79,8 +79,13 @@
                             <ul id='results_list' class="nav nav-second-level" >
                             </ul>
                         </li>
+                        <li>
+                            <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Loaded Profiles<span class="fa arrow"></span></a>
+                            <ul id='profile_list' class="nav nav-second-level" >
+                            </ul>
+                        </li>
                         <li  >
-                          <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Load Results<span class="fa arrow"></span></a>
+                          <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Load Json<span class="fa arrow"></span></a>
                           <ul class="nav nav-second-level" >
                               <li>
                                 <div class="panel panel-default">
@@ -340,22 +345,35 @@
       var xmlhttp = new XMLHttpRequest();
       $.getJSON("/data/inspec_results.json", function(json) {
           raw_dataSet = json['controls']; // this will show the info it in firebug console
-          document.getElementById("profile_name").innerHTML = json['profile_name'];
+          document.getElementById("profile_name").innerHTML = json['profile_name'].split(';')[1];
           load_tables();
       });
       $.getJSON("/inspec_results_list.json", function(json) {
         results_list_html = ''
+        profile_list_html = ''
           Object.keys(json).forEach(function(key) {
-            results_list_html = results_list_html + '<li><a href="#" >' + key + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
-            json[key].map( function(item) {
-              console.log(btoa( key + ': ' + item ));
-              link = "/result/" + btoa( key + ': ' + item ) + ".html"
-              results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
-            })
-            results_list_html = results_list_html + '</ul></li>'
-          });
+            if (key.split(';')[0] == 'result')
+            {
+                results_list_html = results_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+                json[key].map( function(item) {
+                  link = "/result/" + btoa( key + ': ' + item ) + ".html"
+                  results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+                })
+                results_list_html = results_list_html + '</ul></li>'
+            } else if (key.split(';')[0] == 'profile')
+            {
+                profile_list_html = profile_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+                json[key].map( function(item) {
+                  link = "/profile/" + btoa( key + ': ' + item ) + ".html"
+                  profile_list_html = profile_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+                })
+                profile_list_html = profile_list_html + '</ul></li>'
+            }
+
+              });
 
           document.getElementById("results_list").innerHTML = results_list_html;
+          document.getElementById("profile_list").innerHTML = profile_list_html;
 
       });
           </script>

@@ -36,6 +36,11 @@ class Heimdall < Sinatra::Base
     erb :results
   end
 
+  get '/profile/*.html' do |n|
+    @json_file = params['splat'].first
+    erb :profile
+  end
+
   post '/upload' do
 
     file = params[:file][:tempfile]
@@ -45,6 +50,8 @@ class Heimdall < Sinatra::Base
 
   get '/' do
     send_file "#{File.dirname(__FILE__)}/www/pages/index.html"
+    # @json_file = 'inspec_results.json'
+    # erb :results
   end
 
 end

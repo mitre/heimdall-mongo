@@ -79,7 +79,7 @@
                             <ul id='results_list' class="nav nav-second-level" >
                             </ul>
                         </li>
-                        <li>
+                        <li  >
                             <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Loaded Profiles<span class="fa arrow"></span></a>
                             <ul id='profile_list' class="nav nav-second-level" >
                             </ul>
@@ -88,14 +88,14 @@
                           <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Load Json<span class="fa arrow"></span></a>
                           <ul class="nav nav-second-level" >
                               <li>
-                          <div class="panel panel-default">
-                              <div class="panel-body">
-                                <form action="/upload" method="POST" enctype="multipart/form-data">
-                                    <input type="file" name="file" style="width: 100%; height: 100%;"><br><br>
-                                    <input type="submit" class="col-xs-12 btn btn-info" value="Upload">
-                                </form>
-                              </div>
-                          </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                      <form action="/upload" method="POST" enctype="multipart/form-data">
+                                          <input type="file" accept=".json" name="file" style="width: 100%; height: 100%;"><br><br>
+                                          <input type="submit" class="col-xs-12 btn btn-info" value="Upload">
+                                      </form>
+                                    </div>
+                                </div>
                               </li>
                           </ul>
 
@@ -152,113 +152,32 @@
                   <li style="font-size:200%;"  id = "profile_name" class="breadcrumb-item active"></li>
                 </ol>
 
-            <!-- /.row -->
+
             <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-success">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="glyphicon glyphicon-ok-circle fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div id = "not_a_finding" class="huge"></div>
-                                    <div>Not A Finding</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-danger">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="glyphicon glyphicon-remove-circle fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div id = "open" class="huge"></div>
-                                    <div>Open</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="glyphicon glyphicon-ban-circle fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div id= "not_applicable" class="huge"></div>
-                                    <div>Not Applicable</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-warning">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="glyphicon glyphicon-warning-sign fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div id = "not_reviewed" class="huge"></div>
-                                    <div>Not Reviewed</div>
-                                </div>
-                            </div>
-                        </div>
-                       <!--  <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
-                    </div>
-                </div>
+
+
+
+
             </div>
-            <!-- /.row -->
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-10">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Control Status
+                            <i class="fa fa-bar-chart-o fa-fw"></i> NIST 800 53 Coverage
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div id="status_pie"></div>
+                            <div id="nist_treemap" class = "chart"></div>
+                            <!--  <div id="nist_treemap" class = "chart" style="width: 10%; height: 20%;"></div>-->
+                        <div class="panel-heading">
+                            <!-- <div style="text-align: center;"><img src="/images/treemap_legend.png"></div> -->
                         </div>
-                        <!-- /.panel-body -->
-                    </div>
-                </div>
 
-                <div class="col-lg-4">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-2">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Control Severity
@@ -269,37 +188,6 @@
                         </div>
                         <!-- /.panel-body -->
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Compliance Level
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div id="profile_gauge"></div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                </div>
-            </div>
-                        <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> NIST 800 53 Coverage
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div id="nist_treemap" class = "chart"></div>
-                            <!--  <div id="nist_treemap" class = "chart" style="width: 10%; height: 20%;"></div>-->
-                        <div class="panel-heading">
-                            <div style="text-align: center;"><img src="/images/treemap_legend.png"></div>
-                        </div>
-
-                        </div>
-                    </div>
-
                 </div>
             </div>
               <div class="row">
@@ -355,11 +243,11 @@
             if (key.split(';')[0] == 'result')
             {
                 results_list_html = results_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
-                json[key].map( function(item) {
-                  link = "/result/" + btoa( key + ': ' + item ) + ".html"
-                  results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
-                })
-                results_list_html = results_list_html + '</ul></li>'
+            json[key].map( function(item) {
+              link = "/result/" + btoa( key + ': ' + item ) + ".html"
+              results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+            })
+            results_list_html = results_list_html + '</ul></li>'
             } else if (key.split(';')[0] == 'profile')
             {
                 profile_list_html = profile_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
@@ -369,8 +257,7 @@
                 })
                 profile_list_html = profile_list_html + '</ul></li>'
             }
-
-              });
+          });
 
           document.getElementById("results_list").innerHTML = results_list_html;
           document.getElementById("profile_list").innerHTML = profile_list_html;
@@ -396,7 +283,7 @@
     </script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <script src="../js/graphs.js"></script>
+    <script src="../js/profile_graphs.js"></script>
 
     <script src="../dist/js/sb-admin-2.js"></script>
 

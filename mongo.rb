@@ -43,7 +43,7 @@ class Mongo_DB
     db = @client.database
 
     db.collection_names.each do |collection|
-      db[collection].drop()
+      db['cHJvZmlsZTtkb2NrZXI6IDAuMS4w'].drop()
     end
   end
 end
