@@ -1,11 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    json (2.1.0)
     mini_portile2 (2.2.0)
+    mongo (2.4.3)
+    bson (>= 4.2.1, < 5.0.0)
+    json (2.1.0)
     mustermann (1.0.1)
     nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
     puma (3.10.0)
     rack (2.0.3)
     rack-protection (2.0.0)
@@ -19,6 +20,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-16
 
 DEPENDENCIES
   json
@@ -27,4 +29,4 @@ DEPENDENCIES
   sinatra
 
 BUNDLED WITH
-   1.15.1
+   1.15.4

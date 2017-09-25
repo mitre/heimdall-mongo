@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Heimdall</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../vendor/highlight/styles/default.css">
+    <link rel="shortcut icon" href="favicon.ico">
+
+
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+
+    <link href="../vendor/c3/c3.css" rel="stylesheet">
+
+    <style type="text/css" class="init">
+    .floating {
+        position: fixed;
+        top: 65px;
+        right: 20px;
+        visibility: hidden;
+    }
+      #nist_treemap rect {
+            stroke: black;
+            stroke-width: 0.25;
+          }
+.chart {
+  width: 100%;
+  min-height: 300px;
+}
+ </style>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="../vendor/c3/c3.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand"  style="font-size:250%;">Heimdall</a><img width="12%" height="12%" src="../images/logo.png">
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+
+                <!-- /.dropdown -->
+            </ul>
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="\"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Loaded Results<span class="fa arrow"></span></a>
+                            <ul id='results_list' class="nav nav-second-level" >
+                            </ul>
+                        </li>
+                        <li  >
+                            <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Loaded Profiles<span class="fa arrow"></span></a>
+                            <ul id='profile_list' class="nav nav-second-level" >
+                            </ul>
+                        </li>
+                        <li  >
+                          <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Load Json<span class="fa arrow"></span></a>
+                          <ul class="nav nav-second-level" >
+                              <li>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                      <form action="/upload" method="POST" enctype="multipart/form-data">
+                                          <input type="file" accept=".json" name="file" style="width: 100%; height: 100%;"><br><br>
+                                          <input type="submit" class="col-xs-12 btn btn-info" value="Upload">
+                                      </form>
+                                    </div>
+                                </div>
+                              </li>
+                          </ul>
+
+                      </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Welcome to Heimdall!</h1>
+                        <h4 class="page-header">Use the 'Load Json' tab on the left to load data</h4>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+
+    <script type="text/javascript" class="init">
+      $.getJSON("/inspec_results_list.json", function(json) 
+      {
+        results_list_html = '';
+        profile_list_html = '';
+        Object.keys(json).forEach(function(key) {
+        if (key.split(';')[0] == 'result')
+        {
+            results_list_html = results_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+            json[key].map( function(item) 
+            {
+              link = "/result/" + btoa( key + ': ' + item ) + ".html"
+              results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+            })
+            results_list_html = results_list_html + '</ul></li>'
+        }
+        else if (key.split(';')[0] == 'profile')
+        {
+            profile_list_html = profile_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+            json[key].map( function(item) 
+            {
+              link = "/profile/" + btoa( key + ': ' + item ) + ".html"
+              profile_list_html = profile_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+            })
+            profile_list_html = profile_list_html + '</ul></li>'
+        }
+        });
+
+        document.getElementById("results_list").innerHTML = results_list_html;
+        document.getElementById("profile_list").innerHTML = profile_list_html;
+
+      });
+          </script>
+
+
+
+          <script type="text/javascript">
+
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href") // activated tab
+        alert(target);
+      });
+
+      function test () {
+          $('pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+      }
+
+    </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script src="../js/profile.js"></script>
+
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../vendor/highlight/highlight.pack.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
