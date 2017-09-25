@@ -18,7 +18,6 @@ class Heimdall < Sinatra::Base
     content_type :json
     json = JSON.parse(@@mongo_handle.get_all_collections)
     loaded_results = {}
-    puts json
     json['collections'].each do |profile_name|
       loaded_results[profile_name.split(': ')[0]] = [] unless loaded_results.key?(profile_name.split(': ')[0])
       loaded_results[profile_name.split(': ')[0]].push(profile_name.split(': ')[1])
@@ -42,16 +41,22 @@ class Heimdall < Sinatra::Base
   end
 
   post '/upload' do
-
     file = params[:file][:tempfile]
     InspecResultsParser.new(file.read)
     redirect "/"
   end
 
   get '/' do
-    send_file "#{File.dirname(__FILE__)}/www/pages/index.html"
-    # @json_file = 'inspec_results.json'
-    # erb :results
+    latest_upload = @@mongo_handle.retrieve_latest['name']
+    if latest_upload.split(';').first == 'profile'
+      @json_file = Base64.strict_encode64(latest_upload)
+      erb :profile
+    elsif latest_upload.split(';').first == 'result'
+      @json_file = Base64.strict_encode64(latest_upload)
+      erb :results
+    else
+      erb :welcome
+    end
   end
 
 end

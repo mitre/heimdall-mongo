@@ -103,41 +103,6 @@
                     </ul>
                 </div>
 
-<!--                 <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-upload fa-fw"></i> Upload Inspec Results
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                            <input type="file">
-                                        </div>
-                        </div>
-                    </div>
-                </div>
-                </div> -->
-    <!--                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-upload fa-fw"></i> Upload Inspec Results
-                            </div>
-                            <div class="panel-body">
-                            <div class="form-group">
-                                                <label>Multiple Selects</label>
-                                                <select multiple="" class="form-control">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                </select>
-                                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div> -->
                 <!-- /.sidebar-collapse -->
             </div>
             <!-- /.navbar-static-side -->
@@ -167,13 +132,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
+
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -189,13 +148,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
+
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -211,13 +164,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -233,13 +179,6 @@
                                 </div>
                             </div>
                         </div>
-                       <!--  <a href="#">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a> -->
                     </div>
                 </div>
             </div>
@@ -340,42 +279,43 @@
     <button id = "clear_filters_button" type="button" class="btn btn-primary floating">Clear Filters</button>
 
     <script type="text/javascript" class="init">
-
-      var raw_dataSet
-      var xmlhttp = new XMLHttpRequest();
-      $.getJSON("/data/<%= @json_file %>.json", function(json) {
-          raw_dataSet = json['controls']; // this will show the info it in firebug console
-          document.getElementById("profile_name").innerHTML = json['profile_name'].split(';')[1];
-          load_tables();
-      });
-      $.getJSON("/inspec_results_list.json", function(json) {
-        results_list_html = ''
-        profile_list_html = ''
-          Object.keys(json).forEach(function(key) {
-            if (key.split(';')[0] == 'result')
+        var raw_dataSet
+        var xmlhttp = new XMLHttpRequest();
+        $.getJSON("/data/<%= @json_file %>.json", function(json) 
+        {
+            raw_dataSet = json['controls'];
+            document.getElementById("profile_name").innerHTML = json['profile_name'].split(';')[1];
+            load_views();
+        });
+        $.getJSON("/inspec_results_list.json", function(json) 
+        {
+            results_list_html = ''
+            profile_list_html = ''
+            Object.keys(json).forEach(function(key) 
             {
-                results_list_html = results_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
-                json[key].map( function(item) {
-                  link = "/result/" + btoa( key + ': ' + item ) + ".html"
-                  results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
-                })
-                results_list_html = results_list_html + '</ul></li>'
-            } else if (key.split(';')[0] == 'profile')
-            {
-                profile_list_html = profile_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
-                json[key].map( function(item) {
-                  link = "/profile/" + btoa( key + ': ' + item ) + ".html"
-                  profile_list_html = profile_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
-                })
-                profile_list_html = profile_list_html + '</ul></li>'
-            }
-
-              });
-
-          document.getElementById("results_list").innerHTML = results_list_html;
-          document.getElementById("profile_list").innerHTML = profile_list_html;
-
-      });
+                if (key.split(';')[0] == 'result')
+                {
+                    results_list_html = results_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+                    json[key].map( function(item) 
+                    {
+                      link = "/result/" + btoa( key + ': ' + item ) + ".html"
+                      results_list_html = results_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+                    })
+                    results_list_html = results_list_html + '</ul></li>'
+                } 
+                else if (key.split(';')[0] == 'profile')
+                {
+                    profile_list_html = profile_list_html + '<li><a href="#" >' + key.split(';')[1] + '<span class="fa arrow"></span></a><ul class="nav nav-third-level">'
+                    json[key].map( function(item) {
+                      link = "/profile/" + btoa( key + ': ' + item ) + ".html"
+                      profile_list_html = profile_list_html + '<li><a href=' + link + '>'+ item + '</a></li>'
+                    })
+                    profile_list_html = profile_list_html + '</ul></li>'
+                }
+            });
+            document.getElementById("results_list").innerHTML = results_list_html;
+            document.getElementById("profile_list").innerHTML = profile_list_html;
+        });
           </script>
 
 
@@ -396,7 +336,7 @@
     </script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <script src="../js/graphs.js"></script>
+    <script src="../js/results.js"></script>
 
     <script src="../dist/js/sb-admin-2.js"></script>
 

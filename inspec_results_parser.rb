@@ -8,17 +8,18 @@ require 'nokogiri'
 require 'json'
 require_relative 'mongo.rb'
 
+DATA_NOT_FOUND_MESSAGE = 'N/A'
+
 class InspecResultsParser
   def initialize(inspec_json)
     begin
-      # inspec_json = File.read(inspec_json)
       @data = parse_json(inspec_json)
       @mdb = Mongo_DB.new
       @mdb.insert_profile(@data)
       File.write("#{File.dirname(__FILE__)}/www/data/inspec_results.json", @data.to_json)
     rescue => err
       puts "Exception: #{err}"
-      abort
+      # abort
     end
     puts "\nProcessed #{@data.keys.count} controls"
   end
@@ -56,45 +57,42 @@ class InspecResultsParser
     file = JSON.parse(json)
     controls = []
     if file['profiles'].nil?
-      puts "-------> here"
       controls = file['controls']
-      # results_json['profile_name'] = file['name'] + ': ' + file['version']
       results_json['profile_name'] = 'profile;'+ file['name'] + ': ' + file['version']
     elsif file['profiles'].length == 1
       controls = file['profiles'].last['controls']
-      # results_json['profile_name'] = file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
       results_json['profile_name'] = 'result;'+ file['profiles'].last['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     else
       file['profiles'].each do |profile|
         controls.concat(profile['controls'])
       end
-      # results_json['profile_name'] = 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
       results_json['profile_name'] = 'result;'+ 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     end
     data = {}
+
     controls.each do |control|
       c_id = control['id'].to_sym
       data[c_id] = {}
-      data[c_id][:vuln_num]       = control['id']    || 'invalid'
-      data[c_id][:rule_title]     = control['title'] || 'invalid'
-      data[c_id][:vuln_discuss]   = control['desc'] || 'invalid'
-      data[c_id][:severity]       = control['tags']['severity'] || 'invalid'
-      data[c_id][:gid]            = control['tags']['gid'] || 'invalid'
-      data[c_id][:group_title]    = control['tags']['gtitle'] || 'invalid'
-      data[c_id][:rule_id]        = control['tags']['rid'] || 'invalid'
-      data[c_id][:rule_ver]       = control['tags']['stig_id'] || 'invalid'
-      data[c_id][:cci_ref]        = control['tags']['cci'] || 'invalid'
-      data[c_id][:nist]           = control['tags']['nist'] || ['Unmapped']
-      data[c_id][:check_content]  = control['tags']['check'] || 'invalid'
-      data[c_id][:fix_text]       = control['tags']['fix'] || 'invalid'
+      data[c_id][:vuln_num]       = control['id']    || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:rule_title]     = control['title'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:vuln_discuss]   = control['desc'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:severity]       = control['tags']['severity'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:gid]            = control['tags']['gid'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:group_title]    = control['tags']['gtitle'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:rule_id]        = control['tags']['rid'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:rule_ver]       = control['tags']['stig_id'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:cci_ref]        = control['tags']['cci'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:nist]           = control['tags']['nist'] || ['unmapped']
+      data[c_id][:check_content]  = control['tags']['check'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:fix_text]       = control['tags']['fix'] || DATA_NOT_FOUND_MESSAGE
 
-      data[c_id][:rationale]       = control['tags']['rationale'] || 'invalid'
-      data[c_id][:cis_family]       = control['tags']['cis_family'] || 'invalid'
-      data[c_id][:cis_rid]       = control['tags']['cis_rid'] || 'invalid'
-      data[c_id][:cis_level]       = control['tags']['cis_level'] || 'invalid'
+      data[c_id][:rationale]       = control['tags']['rationale'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:cis_family]       = control['tags']['cis_family'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:cis_rid]       = control['tags']['cis_rid'] || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:cis_level]       = control['tags']['cis_level'] || DATA_NOT_FOUND_MESSAGE
 
-      data[c_id][:impact]         = control['impact'].to_s || 0
-      data[c_id][:code]           = control['code'].to_s || 'invalid'
+      data[c_id][:impact]         = control['impact'].to_s || DATA_NOT_FOUND_MESSAGE
+      data[c_id][:code]           = control['code'].to_s || DATA_NOT_FOUND_MESSAGE
 
       data[c_id][:status] = []
       data[c_id][:message] = []
@@ -117,4 +115,3 @@ class InspecResultsParser
     results_json
   end
 end
-# InspecResultsParser.new('rhel7profile2.json')
