@@ -1,3 +1,4 @@
+var  DATA_NOT_FOUND_MESSAGE = 'N/A'
 
 function load_views()
 {
@@ -136,6 +137,10 @@ function draw_data_table()
             { 
               // "className": 'table_row',
               "data": "nist" 
+            },
+            { 
+              "className": 'hidden_column',
+              "data": "code" 
             }
         ],
         "order": [[1, 'asc']]

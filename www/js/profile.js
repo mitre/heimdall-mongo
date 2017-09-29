@@ -111,6 +111,10 @@ function draw_data_table()
             { 
               // "className": 'table_row',
               "data": "nist" 
+            },
+            { 
+              "className": 'hidden_column',
+              "data": "code" 
             }
         ],
         "order": [[1, 'asc']]

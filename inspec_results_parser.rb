@@ -16,7 +16,6 @@ class InspecResultsParser
       @data = parse_json(inspec_json)
       @mdb = Mongo_DB.new
       @mdb.insert_profile(@data)
-      File.write("#{File.dirname(__FILE__)}/www/data/inspec_results.json", @data.to_json)
     rescue => err
       puts "Exception: #{err}"
       # abort

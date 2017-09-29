@@ -44,6 +44,9 @@
   width: 100%;
   min-height: 300px;
 }
+.hidden_column {
+ display: none;
+}
  </style>
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
@@ -170,6 +173,7 @@
                                     <!-- <th>Status</th> -->
                                     <th>Impact</th>
                                     <th>NIST</th>
+                                    <th class="hidden_column">Code</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -179,6 +183,7 @@
                                     <!-- <th>Status</th> -->
                                     <th>Impact</th>
                                     <th>NIST</th>
+                                    <th class="hidden_column">Code</th>
                                 </tr>
                             </tfoot>
                         </table>
