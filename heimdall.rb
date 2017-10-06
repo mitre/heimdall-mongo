@@ -1,3 +1,5 @@
+#!/usr/local/bin/ruby
+
 require_relative 'inspec_results_parser.rb'
 require_relative 'mongo.rb'
 require "base64"
