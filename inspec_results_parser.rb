@@ -104,7 +104,7 @@ class InspecResultsParser
         end
       end
       if data[c_id][:impact].to_f.zero?
-        data[c_id][:message] = control['desc']
+        data[c_id][:message] = control['desc'] || DATA_NOT_FOUND_MESSAGE
       end
       data[c_id][:result]           = clk_status(data[c_id])
       data[c_id][:finding_details]  = clk_finding_details(data[c_id])

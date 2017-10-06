@@ -55,10 +55,8 @@ class Mongo_DB
   def drop_all_collections
     json = {'collections' => []}
     db = @client.database
-
     db.collection_names.each do |collection|
       db[collection].drop()
     end
   end
 end
-
