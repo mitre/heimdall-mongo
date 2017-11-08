@@ -7,7 +7,6 @@ require 'sinatra/base'
 
 class Heimdall < Sinatra::Base
   set :public_folder, "#{File.dirname(__FILE__)}/www"
-  set :bind, '0.0.0.0'
 
   configure do
     @@mongo_handle = Mongo_DB.new
