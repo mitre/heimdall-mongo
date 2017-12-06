@@ -29,6 +29,8 @@
 
     <link href="../vendor/c3/c3.css" rel="stylesheet">
 
+    <link href="../dist/css/collapsible_list.css" rel="stylesheet" type="text/css">
+
     <style type="text/css" class="init">
     .floating {
         position: fixed;
@@ -278,6 +280,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> SSP Ready Control Implementation Details and Status
+                  </div>
+                    <!-- <ul id="sspList" class="collapsibleList"> -->
+                    <ul id="sspList" class="collapsibleList">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- /.row -->
         </div>
     </div>
@@ -289,6 +305,7 @@
         $.getJSON("/data/<%= @json_file %>.json", function(json) 
         {
             raw_dataSet = json['controls'];
+            raw_json = json;
             document.getElementById("profile_name").innerHTML = json['profile_name'].split(';')[1];
             load_views();
         });
@@ -348,6 +365,9 @@
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../vendor/highlight/highlight.pack.js"></script>
 
+    <script src="../js/CollabsableList.js"></script>
+
+
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../vendor/metisMenu/metisMenu.min.js"></script>
 
@@ -356,7 +376,6 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
-
 </body>
 
 </html>

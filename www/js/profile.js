@@ -8,6 +8,7 @@ function load_views()
   draw_data_table();
   draw_severity_pie_chart()
   draw_tree_map();
+  draw_ssp_table();
 }
 
 function details_panel ( d ) {
@@ -415,6 +416,85 @@ function filter(keyword)
   {
     return n.result==='keyword';
   });
+}
+
+function draw_ssp_table()
+{
+    dataSet = filterDataset();
+    controls = getAllNistControls(dataSet);
+    groupedControls = getGroupedControls(controls, dataSet)
+
+    // Add elements to the list
+    var ssp_ul = document.getElementById("sspList");
+    groupedControls.forEach( function (family) {
+        console.log(family);
+        var counter = 1;
+        var family_li = document.createElement("li");
+        ssp_ul.appendChild(family_li);
+        //family_li.appendChild(document.createTextNode(Object.keys(family)[0]));
+        family_li.innerHTML = family.name;
+        var family_ul = document.createElement('ul');
+        family_ul.classList.add('list');
+        family_li.appendChild(family_ul);
+
+        var profile_name_ul = document.createElement('ul');
+        profile_name_ul.classList.add('list');
+        var profile_name_li = document.createElement('li');
+        family_ul.appendChild(profile_name_li);
+        profile_name_li.appendChild(document.createTextNode(document.getElementById('profile_name').innerHTML));
+        profile_name_li.appendChild(profile_name_ul);
+
+        family.controls.forEach( function (control) {
+            var title_li = document.createElement('li');
+            title_li.appendChild(document.createTextNode(counter.toString() + ". Title: " + control.rule_title + "\t (" + control.result + ")"));
+            counter += 1;
+            profile_name_ul.appendChild(title_li);
+
+            var title_ul = document.createElement('ul');
+            title_li.appendChild(title_ul);
+            var disc_li = document.createElement('li');
+            disc_li.appendChild(document.createTextNode("Discussion: " + control.vuln_discuss));
+            title_ul.appendChild(disc_li);
+            var check_li = document.createElement('li');
+            check_li.appendChild(document.createTextNode("Check Text: " + control.check_content));
+            title_ul.appendChild(check_li);
+            var fix_li = document.createElement('li');
+            fix_li.appendChild(document.createTextNode("Fix Text: " + control.fix_text));
+            title_ul.appendChild(fix_li);
+            profile_name_ul.appendChild(title_li);
+        });
+    });
+    CollapsibleLists.applyTo(document.getElementById('sspList'));
+}
+
+function getGroupedControls(controls, dataSet)
+{
+    var groupedControls = []
+    for (var i = 0; i < controls.length; i ++) {
+        var groupedControl = {'name': controls[i], 'controls': []};
+        dataSet.forEach(function(test) {
+            if (test.nist[0].includes(controls[i])) {
+                groupedControl['controls'].push(test);
+            }
+        });
+        groupedControls.push(groupedControl);
+    }
+    return groupedControls;
+}
+
+function getAllNistControls(dataSet)
+{
+    var controls = {};
+    dataSet.forEach(function(test) {
+        nist_tag = test.nist[0].match(/\w\w-\d*/)[0];
+        if (controls.nist_tag != 1)
+        {
+            controls[nist_tag] = 1;
+        }
+    });
+    controls = Object.keys(controls).sort();
+
+    return controls;
 }
 
 

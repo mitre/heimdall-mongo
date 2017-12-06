@@ -12,7 +12,7 @@ Sinatra
 ## Usage
 
 ```
-./heimdall inspec_results.json
+ruby heimdall
 ```
 
 ## Features

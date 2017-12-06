@@ -20,6 +20,7 @@ class Mongo_DB
   end
 
   def retrieve_profile(profile_name)
+    puts profile_name
     json = { 'profile_name' => Base64.decode64(profile_name), 'controls' => [] }
     collection = @client[profile_name]
     collection.find.each do |document|

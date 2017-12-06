@@ -65,7 +65,8 @@ class InspecResultsParser
       file['profiles'].each do |profile|
         controls.concat(profile['controls'])
       end
-      results_json['profile_name'] = 'result;'+ 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      results_json['profile_name'] = 'result;'+ file['name'] + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
+      # results_json['profile_name'] = 'result;'+ 'Overlay' + ': ' + file['controls'].first['start_time'].split[0..1].join(' ')
     end
     data = {}
 
