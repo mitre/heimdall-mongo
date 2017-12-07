@@ -29,8 +29,6 @@
 
     <link href="../vendor/c3/c3.css" rel="stylesheet">
 
-    <link href="../dist/css/collapsible_list.css" rel="stylesheet" type="text/css">
-
     <style type="text/css" class="init">
     .floating {
         position: fixed;
@@ -50,6 +48,8 @@
  display: none;
 }
  </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
     <script type="text/javascript" language="javascript" src="../vendor/jquery/jquery-1.12.4.js"></script>
     <script type="text/javascript" language="javascript" src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="../vendor/d3/d3.v3.min.js" charset="utf-8"></script>
@@ -288,8 +288,8 @@
                     <i class="fa fa-bar-chart-o fa-fw"></i> SSP Ready Control Implementation Details and Status
                   </div>
                     <!-- <ul id="sspList" class="collapsibleList"> -->
-                    <ul id="sspList" class="collapsibleList">
-                    </ul>
+                    <div id="sspList">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -364,8 +364,6 @@
 
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../vendor/highlight/highlight.pack.js"></script>
-
-    <script src="../js/CollabsableList.js"></script>
 
 
     <!-- Metis Menu Plugin JavaScript -->

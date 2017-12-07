@@ -578,9 +578,127 @@ function draw_ssp_table()
     groupedControls = getGroupedControls(controls, dataSet)
 
     //Add elements to the list
+    var ssp_ul = document.getElementById("sspList");
+
+    // Create the panel group
+    var link_counter = 0;
+    var title_counter = 0;
+    groupedControls.forEach( function (family) {
+        //Create high level panel group and panel which everything will be appended too
+        var panel_group_div = document.createElement('div');
+        panel_group_div.classList.add('panel-group');
+        ssp_ul.appendChild(panel_group_div);
+        var panel_div = document.createElement('div');
+        panel_div.classList.add('panel');
+        panel_div.classList.add('panel-default');
+        panel_group_div.appendChild(panel_div);
+
+        var family_heading_div = document.createElement('div');
+        family_heading_div.classList.add('panel_heading');
+        panel_div.appendChild(family_heading_div);
+        var family_title_h = document.createElement('h4');
+        family_title_h.classList.add('panel-title');
+        family_heading_div.appendChild(family_title_h);
+        var family_a = document.createElement("a");
+        family_a.setAttribute('data-toggle', "collapse");
+        family_a.setAttribute('href', "#" + family.name + "_div");
+        family_a.innerHTML = family.name;
+        family_title_h.appendChild(family_a);
+
+        //Create the family div and append it to the panel
+        var family_div = document.createElement('div');
+        family_div.setAttribute('id', family.name + "_div");
+        family_div.classList.add('panel-collapse');
+        family_div.classList.add('collapse');
+        panel_div.appendChild(family_div);
+
+        //Create the heading for the system name and append it to the family_div
+        var system_heading_div = document.createElement('div');
+        system_heading_div.classList.add('panel-heading');
+        family_div.append(system_heading_div);
+
+        //Create the system title and append it to the system_heading_div
+        var system_title_h = document.createElement('h4');
+        system_title_h.classList.add('panel-title');
+        system_heading_div.appendChild(system_title_h);
+
+        //Create the title object a and append it to the system_title_h
+        var system_name_a = document.createElement('a');
+        system_name_a.setAttribute("data-toggle", "collapse");
+        system_name_a.setAttribute("href", "#" + link_counter.toString());
+        system_name_a.innerHTML = document.getElementById('profile_name').innerHTML;
+        system_title_h.appendChild(system_name_a);
+
+        // Create the tests_div and append it to the family_div
+        var tests_div = document.createElement('div');
+        tests_div.classList.add('panel-collapse');
+        tests_div.classList.add('collapse');
+        tests_div.setAttribute("id", link_counter.toString());
+        family_div.appendChild(tests_div);
+        link_counter += 1;
+
+        var counter = 1;
+
+        //Loop through each control test. Create a heading and div for each test
+        family.controls.forEach( function (control) {
+            var result = '';
+            if (control.result == 'Open') {
+                result = 'Other Than Satisfied';
+            } else if (control.result == 'Not A Finding') {
+                result = 'Satisfied';
+            } else {
+                result = "Not Tested";
+            }
+            //Create the title heading dive
+            var test_heading_div = document.createElement('div');
+            test_heading_div.classList.add('panel-heading');
+            tests_div.appendChild(test_heading_div)
+
+            //create the title panel-title and append it to the test_heading div
+            var test_title_h = document.createElement('h4');
+            test_title_h.classList.add('panel-title');
+            test_heading_div.appendChild(test_title_h);
+
+            //Create the test a element and append it to the test_title_h
+            var test_title_a = document.createElement('a');
+            test_title_a.setAttribute('data-toggle', 'collapse');
+            test_title_a.setAttribute('href', "#title" + title_counter.toString());
+            test_title_a.appendChild(document.createTextNode(counter.toString() + ". Title: " + control.rule_title + "\t (" + result + ")"));
+            test_title_h.appendChild(test_title_a);
+            counter += 1;
+
+            //create the list of objects that will be opened when the title is clicked
+            var attributes_panel_div = document.createElement('div');
+            attributes_panel_div.classList.add('panel-collapse');
+            attributes_panel_div.classList.add('collapse');
+            attributes_panel_div.setAttribute('id', 'title' + title_counter.toString() );
+            title_counter += 1;
+            tests_div.appendChild(attributes_panel_div);
+
+            // Create the list group and append it to the attributes_panel_div
+            var attributes_list_group = document.createElement('ul');
+            attributes_list_group.classList.add('list-group');
+            attributes_list_group.style.marginLeft = '20px';
+            attributes_panel_div.appendChild(attributes_list_group);
+
+            var disc_li = document.createElement('li');
+            disc_li.classList.add('list-group-item');
+            disc_li.appendChild(document.createTextNode("Discussion: " + control.vuln_discuss));
+            attributes_list_group.appendChild(disc_li);
+            var check_li = document.createElement('li');
+            check_li.classList.add('list-group-item');
+            check_li.appendChild(document.createTextNode("Content Check: " + control.check_content));
+            attributes_list_group.appendChild(check_li);
+            var fix_li = document.createElement('li');
+            fix_li.classList.add('list-group-item');
+            fix_li.appendChild(document.createTextNode("Fix Text: " + control.fix_text));
+            attributes_list_group.appendChild(fix_li);
+        });
+    });
+
+    //Add elements to the list
     // var ssp_ul = document.getElementById("sspList");
     // groupedControls.forEach( function (family) {
-    //     console.log(family);
     //     var counter = 1;
     //     var family_li = document.createElement("li");
     //     ssp_ul.appendChild(family_li);
@@ -624,54 +742,6 @@ function draw_ssp_table()
     //     });
     // });
     // CollapsibleLists.applyTo(document.getElementById('sspList'));
-
-    //Add elements to the list
-    var ssp_ul = document.getElementById("sspList");
-    groupedControls.forEach( function (family) {
-        console.log(family);
-        var counter = 1;
-        var family_li = document.createElement("li");
-        ssp_ul.appendChild(family_li);
-        //family_li.appendChild(document.createTextNode(Object.keys(family)[0]));
-        family_li.innerHTML = family.name;
-        var family_ul = document.createElement('ul');
-        family_li.appendChild(family_ul);
-
-        var profile_name_ul = document.createElement('ul');
-        var profile_name_li = document.createElement('li');
-        family_ul.appendChild(profile_name_li);
-        profile_name_li.appendChild(document.createTextNode(document.getElementById('profile_name').innerHTML));
-        profile_name_li.appendChild(profile_name_ul);
-
-        family.controls.forEach( function (control) {
-            var result = '';
-            if (control.result == 'Open') {
-                result = 'Other Than Satisfied';
-            } else if (control.result == 'Not A Finding') {
-                result = 'Satisfied';
-            } else {
-                result = "Not Tested";
-            }
-            var title_li = document.createElement('li');
-            title_li.appendChild(document.createTextNode(counter.toString() + ". Title: " + control.rule_title + "\t (" + result + ")"));
-            counter += 1;
-            profile_name_ul.appendChild(title_li);
-
-            var title_ul = document.createElement('ul');
-            title_li.appendChild(title_ul);
-            var disc_li = document.createElement('li');
-            disc_li.appendChild(document.createTextNode("Discussion: " + control.vuln_discuss));
-            title_ul.appendChild(disc_li);
-            var check_li = document.createElement('li');
-            check_li.appendChild(document.createTextNode("Content Check: " + control.check_content));
-            title_ul.appendChild(check_li);
-            var fix_li = document.createElement('li');
-            fix_li.appendChild(document.createTextNode("Fix Text: " + control.fix_text));
-            title_ul.appendChild(fix_li);
-            profile_name_ul.appendChild(title_li);
-        });
-    });
-    CollapsibleLists.applyTo(document.getElementById('sspList'));
 }
 
 function getGroupedControls(controls, dataSet)
