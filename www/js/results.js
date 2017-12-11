@@ -663,7 +663,7 @@ function draw_ssp_table()
             var test_title_a = document.createElement('a');
             test_title_a.setAttribute('data-toggle', 'collapse');
             test_title_a.setAttribute('href', "#title" + title_counter.toString());
-            test_title_a.appendChild(document.createTextNode(counter.toString() + ". Title: " + control.rule_title + "\t (" + result + ")"));
+            test_title_a.appendChild(document.createTextNode(counter.toString() + '. (' + result + ') ' +  control.rule_title));
             test_title_h.appendChild(test_title_a);
             counter += 1;
 
@@ -687,61 +687,14 @@ function draw_ssp_table()
             attributes_list_group.appendChild(disc_li);
             var check_li = document.createElement('li');
             check_li.classList.add('list-group-item');
-            check_li.appendChild(document.createTextNode("Content Check: " + control.check_content));
+            check_li.appendChild(document.createTextNode("Check: " + control.check_content));
             attributes_list_group.appendChild(check_li);
             var fix_li = document.createElement('li');
             fix_li.classList.add('list-group-item');
-            fix_li.appendChild(document.createTextNode("Fix Text: " + control.fix_text));
+            fix_li.appendChild(document.createTextNode("Fix: " + control.fix_text));
             attributes_list_group.appendChild(fix_li);
         });
     });
-
-    //Add elements to the list
-    // var ssp_ul = document.getElementById("sspList");
-    // groupedControls.forEach( function (family) {
-    //     var counter = 1;
-    //     var family_li = document.createElement("li");
-    //     ssp_ul.appendChild(family_li);
-    //     //family_li.appendChild(document.createTextNode(Object.keys(family)[0]));
-    //     family_li.innerHTML = family.name;
-    //     var family_ul = document.createElement('ul');
-    //     family_li.appendChild(family_ul);
-    //
-    //     var profile_name_ul = document.createElement('ul');
-    //     var profile_name_li = document.createElement('li');
-    //     family_ul.appendChild(profile_name_li);
-    //     profile_name_li.appendChild(document.createTextNode(document.getElementById('profile_name').innerHTML));
-    //     profile_name_li.appendChild(profile_name_ul);
-    //
-    //     family.controls.forEach( function (control) {
-    //         var result = '';
-    //         if (control.result == 'Open') {
-    //             result = 'Other Than Satisfied';
-    //         } else if (control.result == 'Not A Finding') {
-    //             result = 'Satisfied';
-    //         } else {
-    //             result = "Not Tested";
-    //         }
-    //         var title_li = document.createElement('li');
-    //         title_li.appendChild(document.createTextNode(counter.toString() + ". Title: " + control.rule_title + "\t (" + result + ")"));
-    //         counter += 1;
-    //         profile_name_ul.appendChild(title_li);
-    //
-    //         var title_ul = document.createElement('ul');
-    //         title_li.appendChild(title_ul);
-    //         var disc_li = document.createElement('li');
-    //         disc_li.appendChild(document.createTextNode("Discussion: " + control.vuln_discuss));
-    //         title_ul.appendChild(disc_li);
-    //         var check_li = document.createElement('li');
-    //         check_li.appendChild(document.createTextNode("Content Check: " + control.check_content));
-    //         title_ul.appendChild(check_li);
-    //         var fix_li = document.createElement('li');
-    //         fix_li.appendChild(document.createTextNode("Fix Text: " + control.fix_text));
-    //         title_ul.appendChild(fix_li);
-    //         profile_name_ul.appendChild(title_li);
-    //     });
-    // });
-    // CollapsibleLists.applyTo(document.getElementById('sspList'));
 }
 
 function getGroupedControls(controls, dataSet)
@@ -773,16 +726,6 @@ function getAllNistControls(dataSet)
 
     return controls;
 }
-//
-// $('li').on('click', function(){
-//     alert('here');
-//     if(!($(this).children('.content').is(':visible'))){
-//         $('.content').slideUp();
-//         $(this).children('.content').slideDown();
-//     } else {
-//         $('.content').slideUp();
-//     }
-// });
 
 
 
