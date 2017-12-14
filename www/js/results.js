@@ -17,7 +17,7 @@ function load_views()
 function details_panel ( d ) {
     // `d` is the original data object for the row
   var details_panel = '';
-  details_panel += 
+  details_panel +=
   '<ul class="nav nav-tabs">'+
   '<li class="active"><a data-toggle="tab" href="#fdetails">Finding Details</a></li>'+
   '<li><a data-toggle="tab" href="#details" >Details</a></li>'+
@@ -89,7 +89,7 @@ function severity_counter()
 function draw_data_table()
 {
   dataSet = filterDataset();
-  if ( $.fn.dataTable.isDataTable( '#results_table' ) ) 
+  if ( $.fn.dataTable.isDataTable( '#results_table' ) )
   {
   var datatable = $('#results_table').dataTable().api();
   datatable.clear();
@@ -128,40 +128,40 @@ function draw_data_table()
               "data":           "result",
               "defaultContent": ''
             },
-            { 
+            {
               // "className": 'table_row',
-              "data": "vuln_num" 
+              "data": "vuln_num"
             },
-            { 
+            {
               // "className": 'table_row',
-              "data": "severity" 
+              "data": "severity"
             },
-            { 
+            {
               // "className": 'table_row',
-              "data": "nist" 
+              "data": "nist"
             },
-            { 
+            {
               "className": 'hidden_column',
-              "data": "code" 
+              "data": "code"
             }
         ],
         "order": [[1, 'asc']]
     } );
         // Add event listener for opening and closing details
-    $('#results_table tbody').on('click', 'td.table_row', 
-      function () 
+    $('#results_table tbody').on('click', 'td.table_row',
+      function ()
       {
         var tr = $(this).closest('tr');
         var row = table.row( tr );
 
-        if ( row.child.isShown() ) 
+        if ( row.child.isShown() )
         {
           row.child.hide();
           tr.removeClass('shown');
         }
         else
         {
-         if ( table.row( '.shown' ).length ) 
+         if ( table.row( '.shown' ).length )
          {
             $('.table_row', table.row( '.shown' ).node()).click();
          }
@@ -211,20 +211,20 @@ function draw_status_pie_chart()
           load_views();
         },
     },
-    color: 
+    color:
     {
       pattern: ['rgb(137, 204, 81)', 'rgb(255, 0, 41)', 'rgb(0, 200, 241)', 'rgb(255, 200, 87)']
     },
-    size: 
+    size:
     {
       height: 240
     },
-    donut: 
+    donut:
     {
       title: "Control Status",
-      label: 
+      label:
       {
-        format: function (value, ratio, id) 
+        format: function (value, ratio, id)
         {
           return d3.format()(value);
         }
@@ -245,11 +245,11 @@ function draw_severity_pie_chart()
   {
     bindto: '#severity_pie',
 
-    data: 
+    data:
     {
       columns: severity_data,
       type : 'donut',
-      onclick: function (d) 
+      onclick: function (d)
       {
         document.getElementById("clear_filters_button").style.visibility = "visible";
         if (d.id == 'CAT I'){
@@ -262,20 +262,20 @@ function draw_severity_pie_chart()
         load_views();
       },
     },
-    color: 
+    color:
     {
         pattern: ['rgb(255, 0, 41)','rgb(255, 200, 87)','rgb(137, 204, 81)' ]
     },
-    size: 
+    size:
     {
       height: 240
     },
-    donut: 
+    donut:
     {
       title: "Control Severity",
-      label: 
+      label:
       {
-        format: function (value, ratio, id) 
+        format: function (value, ratio, id)
         {
           return d3.format()(value);
         }
@@ -297,20 +297,20 @@ function draw_compliance_pie_chart()
   c3.generate({
   bindto: '#profile_gauge',
 
-  data: 
+  data:
   {
     columns: compliance_data,
     type: 'gauge',
   },
 
-  color: 
+  color:
   {
       pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
       threshold: {
           values: [30, 60, 90, 100]
       }
   },
-  size: 
+  size:
   {
       height: 240
   }
@@ -319,7 +319,7 @@ function draw_compliance_pie_chart()
 
 function draw_tree_map()
 {
-  google.charts.load('current', 
+  google.charts.load('current',
   {
     'packages': ['treemap']
   });
@@ -327,7 +327,7 @@ function draw_tree_map()
   google.charts.setOnLoadCallback(drawChart);
   var treemapData = getTreeMapData()
 
-  function drawChart() 
+  function drawChart()
   {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'ID');
@@ -531,7 +531,7 @@ function getTreeMapData()
 
 
 
-var data_filter = 
+var data_filter =
 {
   'result' : '*',
   'severity' : '*',
@@ -554,7 +554,7 @@ function filterDataset ()
 $("#clear_filters_button").click(function()
 {
   document.getElementById("clear_filters_button").style.visibility = "hidden";
-  data_filter = 
+  data_filter =
   {
     'result' : '*',
     'severity' : '*',
@@ -644,10 +644,10 @@ function draw_ssp_table()
             var result = '';
             if (control.result == 'Open') {
                 result = 'Other Than Satisfied';
-            } else if (control.result == 'Not A Finding') {
+            } else if (control.result == 'NotAFinding') {
                 result = 'Satisfied';
             } else {
-                result = "Not Tested";
+                result = "Not_Tested";
             }
             //Create the title heading dive
             var test_heading_div = document.createElement('div');
@@ -726,6 +726,3 @@ function getAllNistControls(dataSet)
 
     return controls;
 }
-
-
-
