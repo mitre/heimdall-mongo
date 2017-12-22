@@ -9,6 +9,7 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/mongo_data/
 .DS_Store
 # Used by dotenv library to load environment variables.
 # .env

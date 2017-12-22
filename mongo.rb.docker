@@ -4,7 +4,7 @@ require "base64"
 
 class Mongo_DB
   def initialize
-    @client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'profiles')
+    @client = Mongo::Client.new([ 'db' ], :database => 'profiles')
   end
 
   def insert_profile(json)

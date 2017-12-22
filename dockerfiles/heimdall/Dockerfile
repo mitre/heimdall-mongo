@@ -1,10 +1,5 @@
 FROM ruby:2.4.2
 
-ENV http_proxy=http://gatekeeper.mitre.org:80
-ENV https_proxy=http://gatekeeper.mitre.org:80
-ENV HTTP_PROXY=http://gatekeeper.mitre.org:80
-ENV HTTPS_PROXY=http://gatekeeper.mitre.org:80
-
 RUN apt-get update -qq && apt-get install -y build-essential
 
 ENV HEIMDALL_ROOT /var/www/heimdall
@@ -18,6 +13,12 @@ ADD Gemfile Gemfile
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 ADD . .
+
+RUN mv heimdall.rb heimdall.rb.orig
+RUN mv heimdall.rb.docker heimdall.rb
+
+RUN mv mongo.rb mongo.rb.orig
+RUN mv mongo.rb.docker mongo.rb
 
 # RUN ./heimdall.rb json/inspec_results.json
 
