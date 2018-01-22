@@ -1,0 +1,35 @@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <p id="notice"><%= notice %></p>
+  <h1>
+    Compliance Mapper
+  </h1>
+</section>
+
+<!-- Main content -->
+<!-- Main content -->
+<section class="content container-fluid">
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <% @mapping_attributes[0].keys.each do |name| %>
+          <th><%= name %></th>
+        <% end %>
+      </tr>
+      </thead>
+
+      <tbody>
+        <% @mapping_attributes.each do |row| %>
+          <tr>
+            <% row.each do |value| %>
+              <td><%= value[1] %></td>
+            <% end %>
+            <td><%= link_to 'edit', edit_mapping_path(row) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
