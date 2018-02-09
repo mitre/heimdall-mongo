@@ -10,26 +10,158 @@
 <!-- Main content -->
 <!-- Main content -->
 <section class="content container-fluid">
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <% @mapping_attributes[0].keys.each do |name| %>
-          <th><%= name %></th>
-        <% end %>
-      </tr>
-      </thead>
-
-      <tbody>
-        <% @mapping_attributes.each do |row| %>
+  <div class="container">
+    <div id="table" class="table-editable">
+      <%= tag "span", { "type" => "button", "onclick" => "addRow()", "class" => "table-add glyphicon glyphicon-plus" } %></span>
+        <table id="table-editable" class="table table-hover">
+          <thead>
           <tr>
-            <% row.each do |value| %>
-              <td><%= value[1] %></td>
-            <% end %>
-            <td><%= link_to 'edit', edit_mapping_path(row) %></td>
+            <th><%= @control_1_name %></th>
+            <th><%= @control_2_name %></th>
+            <th>Comments</th>
+            <th>Approval</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+          
+          </thead>
+
+          <tbody>
+            <% @mapping_attributes.each_with_index do |row, index| %>
+              <tr>
+                <!-- <td class="dropdown">
+                  <div class="form-group">
+                    <%= select_tag "select-1-controls", options_for_select(@control_1.collect{ |u| [u['Control']]}, :selected=>row[row.keys[1]]) %>
+                  </div>
+                </td>
+                
+                <td class="dropdown">
+                  <div class="form-group">
+                    <%= row[row.keys[0]] %>
+                    <%= select_tag "select-2-controls", options_for_select(@control_2.collect{ |u| [u['Control']]}, :selected=>row[row.keys[0]]) %>
+                  </div>
+                </td> -->
+                
+                <td id="control_1_<%= index %>" ><%= row[@control_1_name] %></td>
+                <td id="control_2_<%= index %>"><%= row[@control_2_name] %></td>
+                <td id="comments_<%= index %>"><%= row['Comment'] %></td>
+                <td id="approval_<%= index %>"><%= row['Approval'] %></td>
+
+
+                <td>
+                  <%= tag "span", {  "class" => "table-remove glyphicon glyphicon-remove" } %></span>
+                </td>
+                
+                <td>
+                  <%= tag "input", {"data-row" => "#{row.to_json}", "data-row-id" => "#{index}",  "type" => "button", "value" => "Edit Row", "data-toggle" => "modal", "data-target" => "#rowEditModel", "class" => "btn btn-primary" } %>
+                </td>
+              </tr>
+            <% end %>
+            <!-- This is our clonable table line -->
+            <tr class="hide">
+              <!-- <td class="dropdown">
+                <div class="form-group">
+                   <select class="form-control">
+                     <%= @control_1.each do |key, value| %>
+                        <option value="<%= key['Control'] %>"><%= key['Control'] %></option>
+                     <% end %>
+                   </select>
+                </div>
+              </td> -->
+              <td contenteditable="true">undefined</td>
+              <td contenteditable="true">undefined</td>
+              <td contenteditable="true">undefined</td>
+              <td>
+                <%= tag "span", { "type" => "button", "onclick" => "removeRow()", "class" => "table-remove glyphicon glyphicon-remove" } %></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <%= tag "input", { "type" => "button", "value" => "Export Data", "onclick" => "exportData()", "class" => "btn btn-primary" } %>
+      <p id="export"></p> 
+    </div>
 </section>
+
+<!-- Modal -->
+<div id="rowEditModel" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 form-box">
+      <form role="form" action="" method="post" class="f1">
+
+        <h3>Edit The Row</h3>
+        <div class="f1-steps">
+          <div class="f1-progress">
+              <div class="f1-progress-line" data-now-value="16.66" data-number-of-steps="3" style="width: 16.66%;"></div>
+          </div>
+          <div class="f1-step active">
+            <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+            <p><%= @control_1_name %></p>
+          </div>
+          <div class="f1-step">
+            <div class="f1-step-icon"><i class="fa fa-key"></i></div>
+            <p><%= @control_2_name %></p>
+          </div>
+          <div class="f1-step">
+            <div class="f1-step-icon"><i class="fa fa-twitter"></i></div>
+            <p>Comments And Approval</p>
+          </div>
+        </div>
+        
+        <fieldset>
+          <h4>Edit The First Control:</h4>
+          <div class="form-group">
+            <%= select_tag "select-1-controls", options_for_select(@control_1.collect{ |u| [u['Control']]}) %>
+          </div>
+          <div class="f1-buttons">
+              <button type="button" class="btn btn-next">Next</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <h4>Edit The Second Control:</h4>
+          <div class="form-group">
+            <%= select_tag "select-2-controls", options_for_select(@control_2.collect{ |u| [u['Control']]}) %>
+          </div>
+          <div class="f1-buttons">
+            <button type="button" class="btn btn-previous">Previous</button>
+            <button type="button" class="btn btn-next">Next</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <h4>Add Any Comments and Approval:</h4>
+          <div class="form-group">
+            <label class="sr-only" for="f1-comments">Comments</label>
+              <textarea name="f1-comments" placeholder="Comments..." 
+                               class="f1-comments form-control" id="f1-comments"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="f1-approval">Approval</label>
+              <textarea name="f1-approval" placeholder="Approval..." 
+                               class="f1-approval form-control" id="f1-approval"></textarea>
+          </div>
+          <div class="f1-buttons">
+              <button type="button" class="btn btn-previous">Previous</button>
+              <button type="submit" class="btn btn-submit" id='table_edit_submit'>Submit</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#rowEditModel').on('show.bs.modal', function(e) {
+      //get data-id attribute of the clicked element
+      var row = $(e.relatedTarget).data('row');
+      var row_id = $(e.relatedTarget).data('row-id');
+      $("#f1").attr('row-id', row_id);
+      alert($("#f1").data());
+      //populate the textbox
+      $("#select-1-controls").val(row["<%= @control_1_name %>"]).change();
+      $("#select-2-controls").val(row["<%= @control_2_name %>"]).change();
+      $("#f1-comments").val(row["Comment"]);
+      $("#f1-comments").val(row["Comment"]);
+    });
+  });
+</script>

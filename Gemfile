@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 
+gem 'jquery-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use Puma as the app server
@@ -63,3 +64,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'rest-client'
 
 gem 'roo', '~> 2.7.0'
+
+gem 'compass-rails'
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-select2', '~> 4.0.0'
+end

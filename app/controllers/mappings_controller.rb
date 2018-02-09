@@ -5,18 +5,30 @@ class MappingsController < ApplicationController
 
   def show
     @mapping = params
-    puts @mapping
-    args = {
-        data: { mapping: params['id'] },
+    @control_1_name = params['id'].split('_')[1] # The primary key in the mapping
+    @control_2_name = params['id'].split('_')[2] # The second control that maps to the primary control
+    mapping_args = {
+        data: { name: params['id'] },
         headers: { "Content-Type": "application/json" }
     }
-    response = RestClient.get 'http://localhost:10010/mappings/mapping', {params: args}
+    control_1_args = {
+        data: { name: 'Control_' + @control_1_name },
+        headers: { "Content-Type": "application/json" }
+    }
+    control_2_args = {
+        data: { name: 'Control_' + @control_2_name },
+        headers: { "Content-Type": "application/json" }
+    }
+    response = RestClient.get 'http://localhost:10010/mappings/mapping', {params: mapping_args[:data]}
+    @control_1 = JSON.parse(RestClient.get 'http://localhost:10010/getControlTable', {params: control_1_args[:data]})
+    @control_2 = JSON.parse(RestClient.get 'http://localhost:10010/getControlTable', {params: control_2_args[:data]})
     @mapping_attributes = JSON.parse(response)
-    session[:mapping_attributes] = JSON.parse(response)[0].keys
+    puts @mapping_attributes[0].keys
   end
 
   def edit
     @mapping_attribute = {}
+    puts params
     params.each do |param|
       puts param
       if param != 'controller' and param != 'action'
@@ -27,6 +39,7 @@ class MappingsController < ApplicationController
 
   def index
     response = RestClient.get 'http://localhost:10010/mappings'
+    puts response
     @mappings = JSON.parse(response)
   end
 
