@@ -27,25 +27,10 @@
           <tbody>
             <% @mapping_attributes.each_with_index do |row, index| %>
               <tr>
-                <!-- <td class="dropdown">
-                  <div class="form-group">
-                    <%= select_tag "select-1-controls", options_for_select(@control_1.collect{ |u| [u['Control']]}, :selected=>row[row.keys[1]]) %>
-                  </div>
-                </td>
-                
-                <td class="dropdown">
-                  <div class="form-group">
-                    <%= row[row.keys[0]] %>
-                    <%= select_tag "select-2-controls", options_for_select(@control_2.collect{ |u| [u['Control']]}, :selected=>row[row.keys[0]]) %>
-                  </div>
-                </td> -->
-                
                 <td id="control_1_<%= index %>" ><%= row[@control_1_name] %></td>
                 <td id="control_2_<%= index %>"><%= row[@control_2_name] %></td>
                 <td id="comments_<%= index %>"><%= row['Comment'] %></td>
                 <td id="approval_<%= index %>"><%= row['Approval'] %></td>
-
-
                 <td>
                   <%= tag "span", {  "class" => "table-remove glyphicon glyphicon-remove" } %></span>
                 </td>
@@ -57,15 +42,6 @@
             <% end %>
             <!-- This is our clonable table line -->
             <tr class="hide">
-              <!-- <td class="dropdown">
-                <div class="form-group">
-                   <select class="form-control">
-                     <%= @control_1.each do |key, value| %>
-                        <option value="<%= key['Control'] %>"><%= key['Control'] %></option>
-                     <% end %>
-                   </select>
-                </div>
-              </td> -->
               <td contenteditable="true">undefined</td>
               <td contenteditable="true">undefined</td>
               <td contenteditable="true">undefined</td>
@@ -85,7 +61,7 @@
 <div id="rowEditModel" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 form-box">
-      <form role="form" action="" method="post" class="f1">
+      <%= form_tag({controller: "mappings", action: "edit_entry"}, method: "post", class: "f1") do %>
 
         <h3>Edit The Row</h3>
         <div class="f1-steps">
@@ -107,7 +83,7 @@
         </div>
         
         <fieldset>
-          <h4>Edit The First Control:</h4>
+          <h4>Edit The Primary Control:</h4>
           <div class="form-group">
             <%= select_tag "select-1-controls", options_for_select(@control_1.collect{ |u| [u['Control']]}) %>
           </div>
@@ -117,9 +93,9 @@
         </fieldset>
 
         <fieldset>
-          <h4>Edit The Second Control:</h4>
+          <h4>Edit The Mapping Control:</h4>
           <div class="form-group">
-            <%= select_tag "select-2-controls", options_for_select(@control_2.collect{ |u| [u['Control']]}) %>
+            <%= select_tag "select-2-controls", options_for_select(@control_2.collect{ |u| [u['Control']]}, { :class => 'select' }) %>
           </div>
           <div class="f1-buttons">
             <button type="button" class="btn btn-previous">Previous</button>
@@ -144,7 +120,7 @@
               <button type="submit" class="btn btn-submit" id='table_edit_submit'>Submit</button>
           </div>
         </fieldset>
-      </form>
+      <% end %>
     </div>
   </div>
 </div>
@@ -155,8 +131,7 @@
       //get data-id attribute of the clicked element
       var row = $(e.relatedTarget).data('row');
       var row_id = $(e.relatedTarget).data('row-id');
-      $("#f1").attr('row-id', row_id);
-      alert($("#f1").data());
+      $(document).attr('rowid', row_id);
       //populate the textbox
       $("#select-1-controls").val(row["<%= @control_1_name %>"]).change();
       $("#select-2-controls").val(row["<%= @control_2_name %>"]).change();

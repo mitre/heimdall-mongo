@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   match 'evaluation_upload' => 'evaluations#upload', :as => :upload_evaluation, :via => :post
   match 'mapping_upload' => 'mappings#upload', :as => :upload_mapping, :via => :post
   match 'mapping_new_entry' => 'mappings#entry', :as => :new_entry_mapping, :via => :post
+  match 'edit_entry',      to: 'mappings#edit_entry',        via: 'post'
 
   # Root path (/)
   root :to => 'dashboard#index'

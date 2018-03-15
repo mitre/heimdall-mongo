@@ -23,24 +23,31 @@ class MappingsController < ApplicationController
     @control_1 = JSON.parse(RestClient.get 'http://localhost:10010/getControlTable', {params: control_1_args[:data]})
     @control_2 = JSON.parse(RestClient.get 'http://localhost:10010/getControlTable', {params: control_2_args[:data]})
     @mapping_attributes = JSON.parse(response)
-    puts @mapping_attributes[0].keys
   end
 
   def edit
     @mapping_attribute = {}
-    puts params
     params.each do |param|
-      puts param
       if param != 'controller' and param != 'action'
         @mapping_attribute[param] = params[param]
       end
     end
   end
+  
+  def edit_entry
+    mapping_args = {
+        data: { control_1: params['select-1-controls'],
+                control_2: params['select-2-controls'],
+                comments: params['f1-comments'],
+                approval: params['f1-approval'],
+        },
+        headers: { "Content-Type": "application/json" }
+    }
+  end
 
   def index
     response = RestClient.get 'http://localhost:10010/mappings'
-    puts response
-    @mappings = JSON.parse(response)
+    @mappings = JSON.parse(response)['data']
   end
 
   def update

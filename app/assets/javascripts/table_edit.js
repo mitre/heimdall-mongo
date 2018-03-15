@@ -157,23 +157,13 @@ jQuery(document).ready(function() {
     
     // submit
     $('.f1').on('submit', function(e) {
-      var row_id = $(e.relatedTarget).data('row-id');
-      
-      alert($("#f1").data());
-    	
-    	// // fields validation
-    	// $(this).find('input[type="text"], input[type="password"], textarea').each(function() {
-    	// 	if( $(this).val() == "" ) {
-    	// 		e.preventDefault();
-    	// 		$(this).addClass('input-error');
-    	// 	}
-    	// 	else {
-    	// 		$(this).removeClass('input-error');
-    	// 	}
-    	// });
-    	// fields validation
-    	
+      var row_id = $(document).attr('rowid');
+      // Row attributes to change with the form data
+      $("#control_1_" + row_id)[0].innerHTML = $(this).find('select[name="select-1-controls"]')[0].value
+      $("#control_2_" + row_id)[0].innerHTML = $(this).find('select[name="select-2-controls"]')[0].value
+      $("#comments_" + row_id)[0].innerHTML = $(this).find('textarea[name="f1-comments"]')[0].value
+      $("#approval_" + row_id)[0].innerHTML = $(this).find('textarea[name="f1-approval"]')[0].value
+      $('#rowEditModel').modal('toggle');
+      // return false;
     });
-    
-    
 });

@@ -17,6 +17,8 @@
       <thead>
       <tr>
         <th>Name</th>
+        <th>Primary Control</th>
+        <th>Mapping Control</th>
         <th colspan="3"></th>
       </tr>
       </thead>
@@ -24,8 +26,10 @@
       <tbody>
       <% @mappings.each do |mapping| %>
           <tr>
-            <td><%= mapping['name'] %></td>
-            <td><%= link_to 'Show', mapping_path(mapping['name']) %></td>
+            <td><%= mapping['Name'] %></td>
+            <td><%= mapping['Primary_Control'] %></td>
+            <td><%= mapping['Mapping_Control'] %></td>
+            <td><%= link_to 'Show', mapping_path(mapping['Name']) %></td>
             <td><%= link_to 'Destroy', mapping, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
       <% end %>
