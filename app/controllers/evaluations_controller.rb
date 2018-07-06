@@ -1,7 +1,8 @@
 class EvaluationsController < ApplicationController
-  load_resource
+  # load_resource
   authorize_resource only: [:show, :destroy, :filter, :clear_filter]
-  protect_from_forgery
+  # protect_from_forgery
+  skip_before_action :verify_authenticity_token  
 
   # GET /evaluations
   # GET /evaluations.json
@@ -10,8 +11,9 @@ class EvaluationsController < ApplicationController
   end
 
   # GET /evaluations/1
-  # GET /evaluations/1.json
+  # GET /evaluations/1.json 
   def show
+    @evaulation = Evaluation.find(params[:id])
     @profiles = @evaluation.profiles
     filters, @filter_label = session_filters
     @counts, @controls = @evaluation.status_counts(filters)
@@ -102,10 +104,11 @@ class EvaluationsController < ApplicationController
   end
 
   def upload
-    authorize! :create, Evaluation
+    # authorize! :create, Evaluation
     file = params[:file]
     if (@eval = Evaluation.parse(JSON.parse(file.read)))
       @evaluation = Evaluation.find(@eval.id)
+      User.all[0].evaulations << @evaluation
       redirect_to @evaluation, notice: 'Evaluation uploaded.'
     else
       redirect_to evaluations_url, notice: 'File does not contain an evaluation.'

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery unless: -> { request.format.json? }
   before_action :define_userstamps_current, :check_for_admin
 
   protected
