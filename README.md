@@ -22,9 +22,20 @@ You also need to run these commands if you perform any changes to the code base 
 ### Running Docker Container
 1. Run the following command in a terminal window:
    1. `docker-compose up`
-2. Go to `127.0.0.1:3000` in a web browser
+2. Go to `127.0.0.1:3000/heimdall` in a web browser
 
-#
+### Configuration
+
+See docker-compose.yml for container configuration
+
+##### Host container off relative url
+
+Delete RAILS\_RELATIVE\_URL\_ROOT line from docker-compose.yml and dockerfiles/heimdall/Dockerfile
+
+##### Switch container to dev mode
+
+Delete RAILS\_ENV lines from from docker-compose.yml and dockerfiles/heimdall/Dockerfile
+
 
 This README would normally document whatever steps are necessary to get the
 application up and running.

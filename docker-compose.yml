@@ -17,6 +17,9 @@ services:
     environment:
       RAILS_SERVE_STATIC_FILES: "true"
       RAILS_ENV: production
+      # The rails relative url is not necessary for all builds it can be fully
+      # removed if you wish to host off of '/'. Also, you will have to remove
+      # the relative url from dockerfiles/heimdall/Dockerfile
       RAILS_RELATIVE_URL_ROOT: /heimdall
 
     ports:
