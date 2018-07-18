@@ -36,6 +36,20 @@ Delete RAILS\_RELATIVE\_URL\_ROOT line from docker-compose.yml and dockerfiles/h
 
 Delete RAILS\_ENV lines from from docker-compose.yml and dockerfiles/heimdall/Dockerfile
 
+#### Get keys
+
+List containers, and take note of the full name of the heimdall\_web image's container. *The container name is the rightmost column NAME.*
+
+``` bash
+docker container ps
+``` 
+
+Then copy the secrets file out of the container, replace heimdall\_web\_1 with your container's name.
+
+``` bash
+docker cp heimdall_web_1:/var/www/heimdall/config/secrets.yml  
+```
+
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
