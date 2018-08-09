@@ -1,5 +1,14 @@
 FROM ruby:2.4.4
 
+RUN curl -o /usr/local/share/ca-certificates/MITRE_BA_Root.crt http://pki.mitre.org/MITRE%20BA%20Root.crt
+RUN curl -o /usr/local/share/ca-certificates/MITRE_BA_NPE_CA-1.crt http://pki.mitre.org/MITRE%20BA%20NPE%20CA-1.crt
+RUN curl -o /usr/local/share/ca-certificates/MITRE_BA_NPE_CA-3.crt http://pki.mitre.org/MITRE%20BA%20NPE%20CA-3.crt
+RUN update-ca-certificates
+# ENV http_proxy=http://gatekeeper.mitre.org:80
+# ENV https_proxy=http://gatekeeper.mitre.org:80
+# ENV no_proxy=localhost,127.0.0.1,.mitre.org
+RUN echo "Acquire::http::Proxy \"http://gatekeeper.mitre.org:80\";" >> /etc/apt/apt.conf
+
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
 
 ENV RAILS_ROOT /var/www/heimdall

@@ -87,6 +87,8 @@ deploy-swarm:
     # The following line implies anonymous ldap authentication
     - sed -i"" -e "/admin_/d" config/ldap.yml
     - pip install docker-compose
+    - chmod +x gen-swarm-secrets.sh
+    - ./gen-swarm-secrets.sh
     - docker-compose -f docker-compose.yml.swarm build
     - docker-compose -f docker-compose.yml.swarm push
     - docker stack deploy -c docker-compose.yml.swarm
