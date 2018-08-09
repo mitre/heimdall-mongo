@@ -80,7 +80,7 @@ deploy-swarm:
     # Configuration modification purely for inspec-dev
     # For service behind the MITRE Firewall connecting to gitlab.mitre.org 
     - echo "$SED_PROXY" > sed-script-file
-    - grep MITRE_BA_Root dockerfiles/heimdall/Dockerfile || sed -f sed-script-file -i"" dockerfiles/heimdall/Dockerfile
+    - grep MITRE_BA_Root dockerfiles/heimdall/Dockerfile.swarm || sed -f sed-script-file -i"" dockerfiles/heimdall/Dockerfile.swarm
     - cp config/ldap.example.yml config/ldap.yml
     - sed -i"" -e "s#host.yourdomain.com#ldap-user.mitre.org#g" config/ldap.yml
     - sed -i"" -e "s#yourdomain.com#mitre.org#g" config/ldap.yml
