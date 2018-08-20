@@ -1,6 +1,6 @@
 # Heimdall
 
-Heimdall is a centralized aggregation tool for InSpec evaluations . 
+Heimdall is a centralized aggregation tool for InSpec evaluations
 
 ## Description
 Heimdall supports viewing of InSpec profiles and evaluations in a convenient
@@ -15,32 +15,33 @@ If you wish to use docker, then the dependencies are:
   * Docker
   * docker-compose (installable with pip)
 
-If you wish to use ruby and are on ubuntu, then the dependencies are:
+If you wish to use ruby and are on Ubuntu 16, then the dependencies are:
   * Ruby 2.4.4
   * build-essentials (your distribution's gcc package)
   * Bundler
   * libpq-dev 
   * nodejs
+  * mongodb
 
-### Run directly with Ruby (Instead of Docker)
+#### Run directly with Ruby (Instead of Docker)
 
 This mode is primarily for developers, shared heimdall instances should be
 deployed in production mode.
 1. Install dependencies
-	On ubuntu: `apt-get install build-essentials libpq-dev nodejs libxml2-dev  imagemagick`
+	- `apt-get install build-essential libpq-dev nodejs libxml2-dev libmagick++-dev mongodb-server -y`
 2. Install ruby 2.4.4
 3. Run the following in a terminal
-	1. `bundle install`
-	2. `bundle exec rake db:create` 
-	3. `bundle exec rake db:migrate`
-	4. `bundle exec rails s` Start the server on localhost
+	- `bundle install`
+	- `bundle exec rake db:create` 
+	- `bundle exec rake db:migrate`
+	- `bundle exec rails s` (Start the server on localhost)
 
-### Run With Docker
-#### Building Docker Containers
+#### Run With Docker
+##### Building Docker Containers
 _These steps need to be performed the first time you build the docker
 containers, and whenever you edit the code base._
 
-#### Login Configuration
+##### Login Configuration
 If you would like to use your organization's internal User authentication
 service, when deploying the dockerized Heimdall instance, you'll need to edit
 config/ldap.yml to point to your organization's LDAP server. **You do not have
@@ -49,14 +50,15 @@ Heimdall to perform most actions** You may view ldap.example.yml for how
 authentication of people's internal email addresses works with a LDAP server
 which allows anonymous access.
 
+
 #### Automated Build Steps
 1. Run the following commands from a terminal:
-	1. `git clone https://github.com/aaronlippold/heimdall.git && cd heimdall` # download heimdall
+	1. `git clone https://github.com/aaronlippold/heimdall.git && cd heimdall` # download heimdall and change to it's directory
 	2. `./gen-secrets.sh ` # (Generate Random keys to be stored in a named Docker volume **Do not run if you've ever run it before**)
-   3. `./docker_build.sh` # (may need to first run `chmod +x docker_build.sh` to give the file executable rights)
+  3. `./docker_build.sh` # (may need to first run `chmod +x docker_build.sh` to give the file executable rights)
 2. Jump to [Running Docker Container](#running-docker-container)
 
-#### Manual Build Steps
+##### Manual Build Steps
 1. Install Docker
 2. Clone this repository
 	* `git clone https://github.com/aaronlippold/heimdall.git`
@@ -76,14 +78,14 @@ which allows anonymous access.
 8. Jump to [Running Docker Container](#running-docker-container)
 
    
-#### Running Docker Container
+##### Running Docker Container
 Once you have the container you can run it with:
 
 1. Run the following command in a terminal window:
    * `docker-compose up -d`
 2. Go to `127.0.0.1:3000/heimdall` in a web browser
 
-##### Stopping the Container
+###### Stopping the Container
 `docker-compose down` # From the source directory you started from
 
 ## Usage

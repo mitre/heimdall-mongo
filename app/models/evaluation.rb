@@ -1,3 +1,5 @@
+require "inspec_tools"
+
 class Evaluation
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -46,7 +48,13 @@ class Evaluation
   end
 
   def to_ckl
-    InspecTo.ckl(to_json)
+    tool = InspecTools.inspec(to_json)
+    tool.to_ckl
+  end
+
+  def to_xccdf(attribs)
+    tool = InspecTools.inspec(to_json)
+    tool.to_xccdf(attribs)
   end
 
   def force_created_by(user)
@@ -174,7 +182,7 @@ class Evaluation
       hash["platform_#{key}"] = value
     end
     statistics = hash.delete('statistics')
-    statistics.try(:each) do |key, value|
+    statistics&.each do |key, value|
       hash["statistics_#{key}"] = value
     end
     all_profiles, results = Profile.parse hash.delete('profiles')
@@ -205,7 +213,8 @@ class Evaluation
         evaluation.save
       end
       evaluation
-    rescue Mongoid::Errors::UnknownAttribute
+    rescue Mongoid::Errors::UnknownAttribute => e
+      Rails.logger.debug "Mongoid error: #{e.inspect}"
       nil
     end
   end
