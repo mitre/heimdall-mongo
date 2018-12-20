@@ -974,7 +974,7 @@ function draw_severity_pie_chart(d) {
   ary = [];
   if (d.controls) {
     for(var i=0, len=d.controls.length; i < len; i++) {
-      impact = d.controls[i].impact;
+      impact = d.controls[i].impact_string;
       if (impact == 'low') {
         low += 1;
       } else if (impact == 'medium') {
@@ -1072,7 +1072,7 @@ $("#export-caat").click(function(event) {
     control = controls[i];
     field = [];
 
-    if (impact != 'none' && !vulnList.includes(control.name)) {
+    if (control.impact_string != 'none' && !vulnList.includes(control.name)) {
       vulnList.push(control.name)
       field.push(control.family);              // Control Number
       field.push(br2nl(control.title));        // Finding Title
@@ -1094,7 +1094,7 @@ $("#export-caat").click(function(event) {
       field.push(br2nl(control.fix));          // Recommended Corrective Action(s)
       field.push('');                          // Effect on Business
       field.push('');                          // Likelihood
-      field.push(impact)                       // Impact
+      field.push(control.impact_string)        // Impact
       caat.push(field);
     }
   }

@@ -42,18 +42,18 @@ RSpec.describe Control, type: :model do
     end
 
     it 'get low severity' do
-      control.impact = 'low'
+      control.impact = 0.2
       expect(control.severity).to eq 'low'
     end
 
     it 'get medium severity' do
-      control.impact = 'medium'
+      control.impact = 0.5
       expect(control.severity).to eq 'medium'
     end
 
     it 'get high severity' do
-      control.impact = 'high'
-      expect(control.severity).to eq 'high'
+      control.impact = 0.9
+      expect(control.severity).to eq 'critical'
     end
 
     it 'get build json string' do

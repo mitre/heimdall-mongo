@@ -101,7 +101,7 @@ class Evaluation
   end
 
   def status_symbol(control, ct_results)
-    if control.impact == 'none'
+    if control.impact_string == 'none'
       :not_applicable
     elsif ct_results.nil?
       :not_tested

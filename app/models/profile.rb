@@ -14,6 +14,7 @@ class Profile
   field :parent_profile, type: String
   field :status, type: String
   field :sha256, type: String
+  field :generator, type: Hash
   embeds_many :depends, cascade_callbacks: true
   embeds_many :supports, cascade_callbacks: true
   has_many :controls, dependent: :destroy
