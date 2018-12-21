@@ -6,7 +6,7 @@ class Control
   include Mongoid::Userstamps::Model
   field :title, type: String
   field :desc, type: String
-  field :impact, type: Float
+  field :impact
   field :refs, type: Array, default: []
   field :code, type: String
   field :control_id, type: String

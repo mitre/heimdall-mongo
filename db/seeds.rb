@@ -19,3 +19,10 @@ Profile.each do |profile|
     profile.supports.create(name: 'os-family', value: value)
   end
 end
+
+Control.each do |control|
+  if !control.impact.is_a? Float
+    control.impact = Control.parse_impact(control.impact)
+    control.save
+  end
+end
