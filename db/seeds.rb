@@ -21,14 +21,8 @@ Profile.each do |profile|
 end
 
 Control.each do |control|
-  if control.impact.numeric?
-    impact = control.impact.to_f
-    if impact < 0.1 then control.impact = 'none'
-    elsif impact < 0.4 then control.impact = 'low'
-    elsif impact < 0.7 then control.impact = 'medium'
-    elsif impact < 0.9 then control.impact = 'high'
-    elsif impact >= 0.9 then control.impact = 'critical'
-    end
+  if !control.impact.is_a? Float
+    control.impact = Control.parse_impact(control.impact)
     control.save
   end
 end

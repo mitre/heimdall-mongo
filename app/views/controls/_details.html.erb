@@ -29,17 +29,17 @@
     <table class="table table-bordered table-striped">
       <tr><td>Control:</td><td><%= control.control_id %></td></tr>
       <tr><td>Title:</td><td><%= control.title %></td></tr>
-      <% if control.descriptions.present? %>
-        <tr><td>Descriptions:</td>
-          <td><ul>
-            <% control.descriptions.each do |desc| %>
-              <li><%= desc.label %>: <%= desc.data %></li>
+      <tr><td>Description:</td>
+        <td>
+          <%= control.desc %>
+          <% unless control.descriptions.nil? %>
+            <% control.descriptions.reject{|k,v| k == 'default'}.each do |name, desc| %>
+              <p/>
+              <b><%= name.upcase %></b>: <%= desc %>
             <% end %>
-          </ul></td>
-        </tr>
-      <% else %>
-        <tr><td>Desc:</td><td><%= control.desc %></td></tr>
-      <% end %>
+          <% end %>
+        </td>
+      </tr>
       <tr><td>Impact:</td><td><%= control.impact %></td></tr>
       <% if nist = control.tag('nist') %>
         <tr><td>NIST Ref:</td><td><%= nist %></td></tr>

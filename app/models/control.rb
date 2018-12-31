@@ -6,19 +6,26 @@ class Control
   include Mongoid::Userstamps::Model
   field :title, type: String
   field :desc, type: String
-  field :impact, type: String
+  field :impact
   field :refs, type: Array, default: []
   field :code, type: String
   field :control_id, type: String
-  field :descriptions, type: Array, default: []
+  field :descriptions, type: Hash, default: []
   embeds_many :tags, cascade_callbacks: true
-  embeds_many :descriptions, cascade_callbacks: true
   field :sl_ref, type: String
   field :sl_line, type: Integer
   belongs_to :profile, inverse_of: :controls
   has_many :results
   validates_presence_of :control_id
   validate :code_is_valid
+
+  IMPACT_SCORES = {
+    'none'     => 0.0,
+    'low'      => 0.01,
+    'medium'   => 0.4,
+    'high'     => 0.7,
+    'critical' => 0.9,
+  }.freeze
 
   def to_jbuilder
     Jbuilder.new do |json|
@@ -74,7 +81,7 @@ class Control
   end
 
   def severity
-    impact.downcase
+    impact_string
   end
 
   def parse_nist_tag(nist_tag)
@@ -130,23 +137,37 @@ class Control
       source_location.try(:each) do |key, value|
         control["sl_#{key}"] = value
       end
+
+      # the type of 'descriptions' for 'inspec json PROFILE' and 'inspec json RESULTS' are different
+      if control['descriptions'].is_a? Array
+        control['descriptions'] = control['descriptions'].map do |desc|
+          [desc['label'], desc['data']]
+        end.to_h
+      end
     end
     controls
   end
 
+  def impact_string
+    IMPACT_SCORES.reverse_each do |name, imp|
+      return name if impact >= imp
+    end
+  end
+
+  def self.is_number?(value)
+    Float(value)
+    true
+  rescue
+    false
+  end
+
   def self.parse_impact(value)
     if value.nil?
-      'none'
-    elsif value.numeric?
-      impact = value.to_f
-      if impact < 0.1 then 'none'
-      elsif impact < 0.4 then 'low'
-      elsif impact < 0.7 then 'medium'
-      elsif impact < 0.9 then 'high'
-      elsif impact >= 0.9 then 'critical'
-      end
+      0.0
+    elsif Control.is_number? value
+      value.to_f
     else
-      value.downcase
+      IMPACT_SCORES[value]
     end
   end
 
