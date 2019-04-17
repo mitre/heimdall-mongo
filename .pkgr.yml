@@ -1,12 +1,16 @@
---- 
-build_dependencies: 
+---
+before:
+  - 'ruby bin/build_keys'
+after:
+  - 'ruby bin/build_keys'
+build_dependencies:
   - ImageMagick-devel
   - libxml2-devel
   - libxslt-devel
   - gcc
   - make
   - automake
-dependencies: 
+dependencies:
   - mongodb-org-server
   - ImageMagick
   - libxml2
@@ -14,4 +18,3 @@ dependencies:
   - libxslt
 targets:
   centos-7:
-  
