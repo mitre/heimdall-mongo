@@ -1,8 +1,7 @@
 ---
 before:
-  - 'ruby bin/build_keys'
-after:
-  - 'ruby bin/build_keys'
+  - 'export SECRET_KEY_BASE=xxx'
+after_install: 'setup-secrets.sh'
 build_dependencies:
   - ImageMagick-devel
   - libxml2-devel
@@ -13,8 +12,5 @@ build_dependencies:
 dependencies:
   - mongodb-org-server
   - ImageMagick
-  - libxml2
-  - ImageMagick-c++
-  - libxslt
 targets:
   centos-7:
