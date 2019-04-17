@@ -1,7 +1,4 @@
 --- 
-before: 
-  - "mkdir -p /tmp/db"
-  - "/usr/bin/mongod --dbpath /tmp/db --fork --syslog"
 build_dependencies: 
   - ImageMagick-devel
   - libxml2-devel
