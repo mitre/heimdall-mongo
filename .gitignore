@@ -59,3 +59,6 @@ build-iPhoneSimulator/
 
 .kitchen/
 results/
+
+# Hide docker secrets file from repository
+.env-prod
