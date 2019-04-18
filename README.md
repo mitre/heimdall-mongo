@@ -80,7 +80,7 @@ Rbenv or RVM for ruby version management.
 1. Install rbenv or RVM
 1. Install dependencies
 	- `apt-get install build-essential libpq-dev nodejs libxml2-dev libmagick++-dev mongodb-server -y`
-1. Install ruby by running `rbenv install` or `rvm install` from the root directory of this project
+1. Install ruby by running `rbenv install` or `rvm install $(cat .ruby-version)` from the root directory of this project
 1. Run the following in a terminal
 	- `bundle install`
 	- `bundle exec rake db:create`
