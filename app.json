@@ -10,11 +10,14 @@
   ],
   "description": "InSpec Results Viewer",
   "env": {
-    "CIPHER_PASSWORD": {
+     "SECRET_KEY_BASE": {
       "generator": "secret"
     },
     "CIPHER_SALT": {
-      "required": true
+      "generator": "secret"
+    }
+    "CIPHER_PASSWORD": {
+      "generator": "secret"
     },
     "LANG": {
       "required": true
@@ -37,12 +40,6 @@
     "RUBY_GC_TOKEN": {
       "required": true
     },
-    "SECRET_KEY_BASE": {
-      "generator": "secret"
-    },
-    " CIPHER_SALT": {
-      "generator": "secret"
-    }
   },
   "formation": {
     "web": {
