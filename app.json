@@ -3,22 +3,21 @@
     "mongolab",
     "tunemygc"
   ],
-  "buildpacks": [
-     {
-        "url": "https://github.com/ello/heroku-buildpack-cmake.git"
-     },
-     {
-        "url": "heroku/ruby"
-     }
+  "buildpacks": [{
+      "url": "https://github.com/ello/heroku-buildpack-cmake.git"
+    },
+    {
+      "url": "heroku/ruby"
+    }
   ],
   "description": "InSpec Results Viewer",
   "env": {
-     "SECRET_KEY_BASE": {
+    "SECRET_KEY_BASE": {
       "generator": "secret"
     },
     "CIPHER_SALT": {
       "generator": "secret"
-    }
+    },
     "CIPHER_PASSWORD": {
       "generator": "secret"
     },
@@ -42,7 +41,7 @@
     },
     "RUBY_GC_TOKEN": {
       "required": true
-    },
+    }
   },
   "formation": {
     "web": {
@@ -50,7 +49,6 @@
     }
   },
   "name": "heimdall",
-  "scripts": {
-  },
+  "scripts": {},
   "stack": "heroku-18"
 }
