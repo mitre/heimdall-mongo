@@ -34,11 +34,10 @@
       <!-- Main Footer -->
       <footer class="main-footer">
         <!-- To the right -->
-        <div class="pull-right hidden-xs">
-          Version: <%= Git::VERSION %>
+        <div class="pull-right">
+           <a href="https://github.com/mitre/heimdall/tree/<%= MyApp::VERSION %>"><%= MyApp::VERSION %></a> (<%= MyApp::BRANCH %>)
         </div>
-        <!-- Default to the left -->
-        <strong>Copyright &copy; 2018 <a href="#">MITRE</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; <%= Date.today.year %> <a href="http://www.mitre.org/">MITRE</a></strong>
       </footer>
     </div>
     <!-- ./wrapper -->
