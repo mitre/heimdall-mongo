@@ -4,9 +4,12 @@
     "tunemygc"
   ],
   "buildpacks": [
-    {
-      "url": "heroku/ruby"
-    }
+     {
+        "url": "https://github.com/ello/heroku-buildpack-cmake.git"
+     },
+     {
+        "url": "heroku/ruby"
+     }
   ],
   "description": "InSpec Results Viewer",
   "env": {
@@ -51,4 +54,3 @@
   },
   "stack": "heroku-18"
 }
-
