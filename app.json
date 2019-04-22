@@ -50,7 +50,7 @@
   },
   "name": "heimdall",
   "scripts": {
-    "postdeploy": "bundle exec rake db:create && bundle exec rake db:migrate",
+    "postdeploy": "bundle exec rake db:create db:migrate",
     "pr-predestroy": "bundle exec rake cleanup"
   },
   "stack": "heroku-18"
