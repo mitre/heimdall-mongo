@@ -55,8 +55,9 @@
       "quantity": 1
     }
   },
-  "name": "heimdall",
   "scripts": {
-  },
+    "postdeploy": "bundle exec rake db:setup",
+    "pr-predestroy": "bundle exec rake db:drop"
+ },
   "stack": "heroku-18"
 }
