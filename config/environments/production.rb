@@ -18,6 +18,10 @@ Rails.application.configure do
   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
   # `config/secrets.yml.key`.
   config.read_encrypted_secrets = false
+   
+  # Set relative URL root to environment variable RAILS_RELATIVE_URL_ROOT 
+  
+  config.action_controller.relative_url_root = ENV['RAILS_RELATIVE_URL_ROOT'].present?
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
