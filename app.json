@@ -10,6 +10,12 @@
   ],
   "description": "InSpec Results Viewer",
   "env": {
+    "HEROKU_APP_NAME": {
+       "required": true
+    },
+    "HEROKU_PARENT_APP_NAME": {
+       "required": true
+    },
     "CIPHER_PASSWORD": {
       "generator": "secret"
     },
