@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'version', to: 'version#index'
   resources :users do
     get :image, on: :member
   end
