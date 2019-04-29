@@ -9,6 +9,7 @@
     }
   ],
   "description": "InSpec Results Viewer",
+  "name": "heimdall",
   "env": {
     "HEROKU_APP_NAME": {
        "required": true
