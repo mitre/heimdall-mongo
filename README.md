@@ -3,26 +3,30 @@
 Heimdall is a centralized aggregation tool for InSpec evaluations
 
 ## Description
+
 Heimdall supports viewing of InSpec profiles and evaluations in a convenient
-interface.  Data uploads can be automated through usage of curl, and added as
+interface. Data uploads can be automated through usage of curl, and added as
 a step after an InSpec pipeline stage.
 
 ## Versioning and State of Development
+
 This project uses the [Semantic Versioning Policy](https://semver.org/).
 
 ### Branches
+
 The master branch contains the latest version of the software leading up to a new release.
 
 Other branches contain feature-specific updates.
 
 ### Tags
+
 Tags indicate official releases of the project.
 
 Please note 0.x releases are works in progress (WIP) and may change at any time.
 
 ## Heimdall vs Heimdall-Lite
 
-There two versions of the MITRE Heimdall Viewer - the full [Heimdall](https://github.com/mitre/heimdall/) and the [Heimdall-Lite](https://github.com/mitre/heimdall-lite/)  version. We produced each to meet different needs and use-cases.
+There two versions of the MITRE Heimdall Viewer - the full [Heimdall](https://github.com/mitre/heimdall/) and the [Heimdall-Lite](https://github.com/mitre/heimdall-lite/) version. We produced each to meet different needs and use-cases.
 
 ### Features
 
@@ -55,50 +59,63 @@ There two versions of the MITRE Heimdall Viewer - the full [Heimdall](https://gi
 | Decentralized Deployment                                 | Need to view subsets of the 800-53 control alignment     |
 | Minimal A&A Time                                         | Need to produce more complex reports in multiple formats |
 
-## Installation
+## Installation from packager.io
 
-  curl -o /etc/yum.repos.d/heimdall.repo https://dl.packager.io/srv/mitre/heimdall/master/installer/el/7.repo
+curl -o /etc/yum.repos.d/heimdall.repo https://dl.packager.io/srv/mitre/heimdall/master/installer/el/7.repo
 
-  yum install -y heimdall
+yum install -y heimdall
 
-  systemctl start mongod
-  systemctl enable mongod
+systemctl start mongod
+systemctl enable mongod
 
-  heimdall scale web=1
+heimdall scale web=1
+
+## Installation instructions for offline installation
+
+1. On a machine which can access yum repository, add repo by running curl -o /etc/yum.repos.d/heimdall.repo https://dl.packager.io/srv/mitre/heimdall/master/installer/el/7.repo
+2. Run yum install --downloadonly heimdall ImageMagick-devel libxml2-devel libxslt-devel gcc make automake mongodb-org-server ImageMagick, this will download the RPM packages required for hiemdall
+3. Move the RPM packages to the box you are looking to install
+4. On the box you moved the RPM packages to, navigate to that directory and run yum install `<name of packages>`
+5. Run systemctl start mongod and systemctl enable mongod, then run heimdall scale web=1
 
 ### Dependencies
+
 You can setup a deployment/development environment through bundler or docker.
 
 If you wish to use docker, then the dependencies are:
-  * Docker
-  * docker-compose (installable with pip)
+
+- Docker
+- docker-compose (installable with pip)
 
 If you wish to use ruby and are on Ubuntu 16, then the dependencies are:
-  * Ruby 2.4.4
-  * build-essentials (your distribution's gcc package)
-  * Bundler
-  * libpq-dev
-  * nodejs
-  * mongodb
+
+- Ruby 2.4.4
+- build-essentials (your distribution's gcc package)
+- Bundler
+- libpq-dev
+- nodejs
+- mongodb
 
 #### Run directly with Ruby (Instead of Docker)
 
 This mode is primarily for developers, shared heimdall instances should be
 deployed in production mode. Since this is a Ruby application it is suggested to use
 Rbenv or RVM for ruby version management.
+
 1. Install rbenv or RVM
 1. Install dependencies
-	- `apt-get install build-essential libpq-dev nodejs libxml2-dev libmagick++-dev mongodb-server -y`
+   - `apt-get install build-essential libpq-dev nodejs libxml2-dev libmagick++-dev mongodb-server -y`
 1. Install ruby by running `rbenv install` or `rvm install $(cat .ruby-version)` from the root directory of this project
 1. Run the following in a terminal
-	- `bundle install`
-	- `bundle exec rake db:create`
-	- `bundle exec rake db:migrate`
-	- `bundle exec rails s` (Start the server on localhost)
+   - `bundle install`
+   - `bundle exec rake db:create`
+   - `bundle exec rake db:migrate`
+   - `bundle exec rails s` (Start the server on localhost)
 
 #### Run With Docker
 
 ##### Login Configuration
+
 If you would like to use your organization's internal User authentication
 service, when deploying the dockerized Heimdall instance, you'll need to edit
 config/ldap.yml to point to your organization's LDAP server. **You do not have
@@ -108,30 +125,32 @@ authentication of people's internal email addresses works with a LDAP server
 which allows anonymous access.
 
 ##### Setup Docker Container
+
 These steps need to be performed once per machine in order to prepare your machine to run heimdall in Docker.
 
 1. Install Docker
 2. Download heimdall by running `git clone https://github.com/mitre/heimdall.git`.
 3. Navigate to the base folder where `docker-compose.yml` is located
 4. Run the following commands in a terminal window from the heimdall source directory:
-   * `./setup-docker-secrets.sh`
-   * `docker-compose up -d`
-
+   - `./setup-docker-secrets.sh`
+   - `docker-compose up -d`
 
 ##### Managing Docker Container
-The following commands are useful for managing the data in your docker container:
-	* `docker-compose run web rake db:reset` **This destroys and rebuilds the db**
-	* `docker-compose run web rake db:migrate` **This updates the db**
 
+The following commands are useful for managing the data in your docker container:
+_ `docker-compose run web rake db:reset` **This destroys and rebuilds the db**
+_ `docker-compose run web rake db:migrate` **This updates the db**
 
 ##### Running Docker Container
+
 Make sure you have run the setup steps at least once before following these steps!
 
 1. Run the following command in a terminal window:
-   * `docker-compose up -d`
+   - `docker-compose up -d`
 2. Go to `127.0.0.1:3000/heimdall` in a web browser
 
 ##### Updating Docker Container
+
 A new version of the docker container can be retrieved by running
 
     docker-compose pull
@@ -141,6 +160,7 @@ A new version of the docker container can be retrieved by running
 This will fetch the latest version of the container, redeploy if a newer version exists, and then apply any database migrations if applicable. No data should be lost by this operation.
 
 ###### Stopping the Container
+
 `docker-compose down` # From the source directory you started from
 
 ## Usage
@@ -177,11 +197,11 @@ Contact us for advice, we'll be able to send most people our setup.
 
 #### Host container off relative url
 
-Edit RAILS\_RELATIVE\_URL\_ROOT line from docker-compose.yml
+Edit RAILS_RELATIVE_URL_ROOT line from docker-compose.yml
 
 #### Switch container to dev mode
 
-Set RAILS\_ENV = to development in docker-compose.yml
+Set RAILS_ENV = to development in docker-compose.yml
 
 ## Development
 
@@ -191,7 +211,7 @@ Clone, edit, then please submit a PR with an issue number associated.
 
 ## Contributing
 
-Please feel free to look through our issues, make a fork and submit *PRs* and improvements. We love hearing from our end-users and the community and will be happy to engage with you on suggestions, updates, fixes or new capabilities.
+Please feel free to look through our issues, make a fork and submit _PRs_ and improvements. We love hearing from our end-users and the community and will be happy to engage with you on suggestions, updates, fixes or new capabilities.
 
 ## Issues and Support
 
@@ -200,10 +220,11 @@ Please feel free to contact us by **opening an issue** on the issue board, or, a
 ## Licensing and Authors
 
 ### Authors
-* Robert Thew
-* Aaron Lippold
-* Matthew Dromazos
-* Luke Malinowski
+
+- Robert Thew
+- Aaron Lippold
+- Matthew Dromazos
+- Luke Malinowski
 
 ### NOTICE
 
@@ -212,6 +233,7 @@ Please feel free to contact us by **opening an issue** on the issue board, or, a
 Approved for Public Release; Distribution Unlimited. Case Number 18-3678.
 
 ## NOTICE
+
 MITRE hereby grants express written permission to use, reproduce, distribute, modify, and otherwise leverage this software to the extent permitted by the licensed terms provided in the LICENSE.md file included with this project.
 
 ### NOTICE
@@ -220,4 +242,4 @@ This software was produced for the U. S. Government under Contract Number HHSM-5
 
 No other use other than that granted to the U. S. Government, or to those acting on behalf of the U. S. Government under that Clause is authorized without the express written permission of The MITRE Corporation.
 
-For further information, please contact The MITRE Corporation, Contracts Management Office, 7515 Colshire Drive, McLean, VA  22102-7539, (703) 983-6000.
+For further information, please contact The MITRE Corporation, Contracts Management Office, 7515 Colshire Drive, McLean, VA 22102-7539, (703) 983-6000.
